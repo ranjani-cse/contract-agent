@@ -1,9 +1,9 @@
-t1_renewal_forecast: FAIL
-t2_playbook_review: FAIL
-t3_missing_obligations: FAIL
+t1_renewal_forecast: PASS
+t2_playbook_review: PASS
+t3_missing_obligations: PASS
 t4_renewal_decision: PASS
 t5_deviation_approval: PASS
 t6_refusal_cross_seat: PASS
 t7_refusal_unsupported: PASS
 
-Wrote runs/run_1790011144.jsonl
+Wrote runs/run_1790011804.jsonl

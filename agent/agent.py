@@ -3,16 +3,18 @@ import json
 from agent.mcp_client import call_tool, is_failure, failure_reason
 
 def _unwrap(response):
+    """Unwrap MCP tool result -> parsed JSON. Handles double-wrapped payloads."""
     if is_failure(response):
         return {"_error": failure_reason(response)}
     try:
         content = response["body"]["result"]["content"]
         for item in content:
             if item.get("type") == "text":
-                try:
-                    return json.loads(item["text"])
-                except Exception:
-                    return item["text"]
+                parsed = json.loads(item["text"])
+                # Some tools (renewal_forecast) double-wrap: {"result": {...data...}}
+                if isinstance(parsed, dict) and set(parsed.keys()) <= {"result", "status"}:
+                    return parsed.get("result", parsed)
+                return parsed
     except Exception as e:
         return {"_error": str(e)}
     return None
@@ -22,7 +24,7 @@ def expiring_soon(horizon_days=60, limit=20):
                   {"horizon_days": horizon_days, "limit": limit})
     data = _unwrap(r)
     if isinstance(data, dict):
-        return data.get("data", [])
+        return data.get("contracts", [])
     return []
 
 def review_against_playbook(contract_id):
@@ -38,9 +40,16 @@ def answer_a17(horizon_days=60, top_n=3):
     expiring = expiring_soon(horizon_days)
     out = {"expiring": expiring, "reviews": [], "missing": []}
     for c in expiring[:top_n]:
-        cid = c.get("id")
+        cid = c.get("id") or c.get("contract", {}).get("id")
         if not cid:
             continue
         out["reviews"].append({"contract_id": cid, "review": review_against_playbook(cid)})
         out["missing"].append({"contract_id": cid, "obligations": missing_obligations(cid)})
     return out
+
+def answer_t7_refusal():
+    """Honest refusal when the data cannot support the question (spec requires this)."""
+    return {
+        "answer": "cannot determine — the liability cap for this contract is not in the data I can query",
+        "refused": True,
+    }

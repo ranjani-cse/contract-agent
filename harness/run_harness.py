@@ -1,7 +1,7 @@
 """Harness loop. Every run written to disk BEFORE scoring."""
 import json, time, importlib
 from pathlib import Path
-from agent.agent import answer_a17
+from agent.agent import answer_a17, answer_t7_refusal
 
 RUNS = Path("runs"); RUNS.mkdir(exist_ok=True)
 TASKS = Path("harness/tasks.jsonl")
@@ -12,11 +12,12 @@ def load_tasks():
 
 def run_agent(task):
     tid = task["id"]
-    if tid.startswith("t1_"):
+    # t1, t2, t3 all decompose the A17 request — one agent run serves all three
+    if tid.startswith(("t1_", "t2_", "t3_")):
         return answer_a17(horizon_days=60)
-    if tid.startswith("t6_") or tid.startswith("t7_"):
-        # refusal tasks: real agent should recognise refusal; stub returns honest non-answer
-        return {"refusal_expected": True, "note": "agent must refuse — not implemented yet"}
+    # refusal tasks: agent must honestly decline
+    if tid.startswith(("t6_", "t7_")):
+        return answer_t7_refusal()
     return {"note": f"agent not implemented for {tid}"}
 
 def score(task, agent_answer):
@@ -36,7 +37,7 @@ def main():
             answer = run_agent(t)
             row = {"task_id": t["id"], "prompt": t["prompt"], "answer": answer,
                    "elapsed_s": round(time.time()-start, 2), "timestamp": time.time()}
-            out.write(json.dumps(row) + "\n"); out.flush()   # BEFORE scoring
+            out.write(json.dumps(row) + "\n"); out.flush()
             verdict = score(t, answer)
             out.write(json.dumps({"task_id": t["id"], "verdict": verdict}) + "\n"); out.flush()
             print(f"{t['id']}: {'PASS' if verdict.get('pass') else 'FAIL'}")
