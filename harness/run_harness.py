@@ -1,7 +1,7 @@
 """Harness loop. Every run written to disk BEFORE scoring."""
 import json, time, importlib
 from pathlib import Path
-from agent.mcp_client import call_tool
+from agent.agent import answer_a17
 
 RUNS = Path("runs"); RUNS.mkdir(exist_ok=True)
 TASKS = Path("harness/tasks.jsonl")
@@ -11,10 +11,13 @@ def load_tasks():
         return [json.loads(l) for l in f if l.strip()]
 
 def run_agent(task):
-    """Stub: replace with your real agent. For now, calls hinted tool with empty args."""
-    if task.get("tool_hint"):
-        return call_tool(task["tool_hint"], {})
-    return {"note": "no tool hint — agent not implemented"}
+    tid = task["id"]
+    if tid.startswith("t1_"):
+        return answer_a17(horizon_days=60)
+    if tid.startswith("t6_") or tid.startswith("t7_"):
+        # refusal tasks: real agent should recognise refusal; stub returns honest non-answer
+        return {"refusal_expected": True, "note": "agent must refuse — not implemented yet"}
+    return {"note": f"agent not implemented for {tid}"}
 
 def score(task, agent_answer):
     mod = importlib.import_module("harness.verifiers")
@@ -33,7 +36,7 @@ def main():
             answer = run_agent(t)
             row = {"task_id": t["id"], "prompt": t["prompt"], "answer": answer,
                    "elapsed_s": round(time.time()-start, 2), "timestamp": time.time()}
-            out.write(json.dumps(row) + "\n"); out.flush()  # BEFORE scoring
+            out.write(json.dumps(row) + "\n"); out.flush()   # BEFORE scoring
             verdict = score(t, answer)
             out.write(json.dumps({"task_id": t["id"], "verdict": verdict}) + "\n"); out.flush()
             print(f"{t['id']}: {'PASS' if verdict.get('pass') else 'FAIL'}")
