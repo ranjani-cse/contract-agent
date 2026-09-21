@@ -1,0 +1,27 @@
+[
+  {
+    "horizon_days": 0,
+    "result": "OK",
+    "error": null
+  },
+  {
+    "horizon_days": -5,
+    "result": "OK",
+    "error": null
+  },
+  {
+    "horizon_days": 1,
+    "result": "OK",
+    "error": null
+  },
+  {
+    "horizon_days": 60,
+    "result": "OK",
+    "error": null
+  },
+  {
+    "horizon_days": 999999,
+    "result": "OK",
+    "error": null
+  }
+]
