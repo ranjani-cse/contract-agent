@@ -1,0 +1,9 @@
+Bug 3 evidence: inconsistent failure envelope between entity and endpoint tools
+
+Contract.get with a nonexistent ID:
+{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"Contract not found.","data":{"code":"not_found"}}}
+
+endpoint.contracts.obligation_evidence_pack with a nonexistent contract_id:
+{"jsonrpc":"2.0","id":1,"result":{"content":[{"type":"text","text":"contract_not_found"},{"type":"text","text":"{\"code\":\"request_refused\",\"reason_code\":\"contract_not_found\",\"status\":404}"}],"isError":true,"_meta":{"agentswitch":{"code":"request_refused","status":404,"message":"contract_not_found","reason_code":"contract_not_found"}}}}
+
+Difference: entity tools report failures via body["error"]. The endpoint tool reports failures via body["result"]["isError"] with a _meta.agentswitch block and no body["error"]. A client reading body["error"] cannot detect the endpoint failure.
