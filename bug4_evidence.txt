@@ -1,0 +1,6 @@
+limit=0: OK, returned 0
+limit=-1: OK, returned 0
+limit=1: OK, returned 0
+limit=200: OK, returned 0
+limit=201: OK, returned 0
+limit=9999: OK, returned 0

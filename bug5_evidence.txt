@@ -1,0 +1,4 @@
+offset=-1: OK
+offset=0: OK
+offset=5: OK
+offset=999999: OK
