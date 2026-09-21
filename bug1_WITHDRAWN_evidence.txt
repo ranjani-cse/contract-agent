@@ -4,9 +4,7 @@ Status: withdrawn
 
 Reason: the probe used the wrong argument name. The tool's actual horizon
 argument is `horizon_days`, not `days`. The server's rejection of `days`
-is correct per spec §6 ("an argument that is not in [the schema] is
-rejected rather than ignored"). A corrected follow-up was filed on the
-same form.
+is correct per spec §6. A corrected follow-up was filed on the same form.
 
 Original probe output:
 {"http":200,"body":{"jsonrpc":"2.0","id":1,"error":{"code":-32602,
