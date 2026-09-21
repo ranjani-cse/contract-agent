@@ -1,0 +1,8 @@
+endpoint.contracts.attest_obligation: ERROR Invalid tool arguments.
+endpoint.contracts.bind_deviation_approval: ERROR Invalid tool arguments.
+endpoint.contracts.capture_document_revision: ERROR Invalid tool arguments.
+endpoint.contracts.document_redline: ERROR Invalid tool arguments.
+endpoint.contracts.obligation_evidence_pack: ERROR Invalid tool arguments.
+endpoint.contracts.propose_clause_deviation: ERROR Invalid tool arguments.
+endpoint.contracts.recheck_deviation_coverage: ERROR Invalid tool arguments.
+endpoint.contracts.record_renewal_decision: ERROR Invalid tool arguments.
