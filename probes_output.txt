@@ -1,0 +1,77 @@
+{
+  "probe": "closed_schema",
+  "http": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "Invalid tool arguments.",
+      "data": {
+        "code": "invalid_arguments",
+        "errors": [
+          {
+            "field": "/extra_field",
+            "message": "extra_field is not an accepted argument of this tool."
+          }
+        ]
+      }
+    }
+  }
+}
+{
+  "probe": "cross_seat_leak",
+  "http": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call.",
+      "data": {
+        "code": "tool_not_available"
+      }
+    }
+  }
+}
+{
+  "probe": "error_http_status",
+  "http": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call.",
+      "data": {
+        "code": "tool_not_available"
+      }
+    }
+  }
+}
+{
+  "probe": "expiry_boundary",
+  "http": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "Invalid tool arguments.",
+      "data": {
+        "code": "invalid_arguments",
+        "errors": [
+          {
+            "field": "/days",
+            "message": "days is not an accepted argument of this tool."
+          }
+        ]
+      }
+    }
+  }
+}
+{
+  "probe": "tools_list_scoping",
+  "count": 239,
+  "foreign_tools": []
+}
