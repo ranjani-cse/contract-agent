@@ -22,7 +22,7 @@ def probe_error_http_status():
     return {"probe": "error_http_status", "http": r.status_code, "body": body}
 
 def probe_expiry_boundary():
-    r = call_tool("endpoint.contracts.renewal_forecast", {"days": 60})
+    r = call_tool("endpoint.contracts.renewal_forecast", {"horizon_days": 60})
     return {"probe": "expiry_boundary", "http": r["http_status"], "body": r["body"]}
 
 def probe_tools_list_scoping():
