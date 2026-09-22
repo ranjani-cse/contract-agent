@@ -1,0 +1,21 @@
+Bug 7 evidence: propose_clause_deviation rejects every clause_key from document clauses_used
+
+Document: 0826ccba-16cb-4a79-9e92-f2eb3336a57c
+Document clauses_used entry:
+  {
+    "_clause_id_display": "Confidentiality — Tool Room",
+    "clause_id": "8d4bd634-c2a9-488e-b7bc-b9e836d58b6d",
+    "is_modified": false,
+    "order": 895.11
+  }
+
+Attempts (each with a value taken from that entry):
+  clause_key = "8d4bd634-c2a9-488e-b7bc-b9e836d58b6d"
+    → {"code": "clause_not_in_document", "status": 422}
+  clause_key = "Confidentiality — Tool Room"
+    → {"code": "clause_not_in_document", "status": 422}
+
+Schema declares: clause_key = "Key of a clause present in the document's clauses_used"
+No field in clauses_used is named clause_key. The tool is not callable from the documented schema.
+
+Repro: test_clause_key.py
