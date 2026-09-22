@@ -26,6 +26,9 @@ def call_tool(name, arguments=None):
 def is_failure(response):
     """True if the call failed, regardless of which envelope is used."""
     body = response.get("body", {})
+    # auth / generic error envelope: {"detail": "Authentication required"}
+    if "detail" in body and "result" not in body:
+        return True
     if "error" in body:
         return True
     if body.get("result", {}).get("isError"):
