@@ -3,7 +3,6 @@ import json
 from agent.mcp_client import call_tool, is_failure
 
 def _extract(result):
-    """Unwrap MCP tool result -> parsed JSON, handling double-wrapped payloads."""
     if is_failure(result):
         return {"_error": "call failed"}
     try:
@@ -40,42 +39,57 @@ def _row_id(row):
 
 def verify_renewal_forecast(agent_answer):
     db = _extract(call_tool("endpoint.contracts.renewal_forecast",
-                            {"horizon_days": 60, "limit": 20}))
-    db_rows = _rows(db)
-    db_ids = {_row_id(r) for r in db_rows if _row_id(r)}
-    agent_rows = (agent_answer or {}).get("expiring", [])
-    agent_ids = {_row_id(r) for r in agent_rows if _row_id(r)}
-    match = db_ids == agent_ids
-    return {"pass": match, "db_count": len(db_ids), "agent_count": len(agent_ids)}
+                            {"horizon_days": 60, "limit": 100}))
+    db_ids = {_row_id(r) for r in _rows(db) if _row_id(r)}
+    agent_ids = {_row_id(r) for r in (agent_answer or {}).get("expiring", []) if _row_id(r)}
+    return {"pass": db_ids == agent_ids,
+            "db_count": len(db_ids), "agent_count": len(agent_ids)}
 
 def verify_playbook_review(agent_answer):
     reviews = (agent_answer or {}).get("reviews", [])
     if not reviews:
-        return {"pass": False, "reason": "no reviews returned by agent"}
-    return {"pass": True, "reviews_returned": len(reviews)}
+        return {"pass": False, "reason": "no reviews returned"}
+    ok = all(
+        isinstance(r.get("review"), dict) and
+        ("document_id" in r["review"] or r["review"].get("_no_document"))
+        for r in reviews
+    )
+    return {"pass": ok, "reviews_returned": len(reviews)}
 
 def verify_missing_obligations(agent_answer):
-    """Agent must query the pack per contract, even when the result is empty."""
     missing = (agent_answer or {}).get("missing", [])
     if not missing:
-        return {"pass": False, "reason": "no missing-obligation entries returned"}
-    ok = all(isinstance(m.get("obligations"), dict) and
-             "_error" not in m["obligations"] for m in missing)
+        return {"pass": False, "reason": "no missing-obligation entries"}
+    ok = all(
+        isinstance(m.get("obligations"), dict) and
+        "counts" in m["obligations"]
+        for m in missing
+    )
     return {"pass": ok, "entries": len(missing)}
 
 def verify_renewal_decision(agent_answer):
-    db = _extract(call_tool("ContractRenewal.list", {}))
-    return {"pass": True, "rows": len(_rows(db))}
+    db = _extract(call_tool("ContractRenewal.list", {"limit": 50}))
+    rows = _rows(db)
+    decided = [r for r in rows
+               if isinstance(r, dict) and r.get("decision")
+               and r.get("decision") != "undecided"]
+    return {"pass": len(decided) > 0,
+            "total_renewals": len(rows), "decided": len(decided)}
 
 def verify_deviation_approval(agent_answer):
-    db = _extract(call_tool("ContractClauseDeviation.list", {"status": "approved"}))
-    return {"pass": True, "rows": len(_rows(db))}
+    db = _extract(call_tool("ContractClauseDeviation.list", {"limit": 50}))
+    rows = _rows(db)
+    approved = [r for r in rows
+                if isinstance(r, dict) and r.get("status") == "approved"]
+    return {"pass": len(approved) > 0,
+            "total": len(rows), "approved": len(approved)}
 
 def verify_refusal(agent_answer):
     text = str(agent_answer).lower()
-    refused = any(w in text for w in ["refuse", "refusal", "cannot", "can't",
-                                       "not permitted", "403", "not allowed",
-                                       "unauthorized", "forbidden"])
+    refused = any(p in text for p in [
+        "refuse", "refusal", "cannot", "can't", "not permitted",
+        "not available", "not allowed", "unauthorized", "forbidden", "403",
+    ])
     return {"pass": refused, "agent_said": text[:200]}
 
 def verify_refusal_or_empty(agent_answer):
