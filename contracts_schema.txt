@@ -1,0 +1,2937 @@
+{
+      "entity": "ContractPlaybook",
+      "domain": "contracts",
+      "kind": "record",
+      "behaviors": [
+        "numberable"
+      ],
+      "reserved_behaviors": [
+        "commentable",
+        "versionable"
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "document_type",
+          "type": "select",
+          "required": false,
+          "options": [
+            "nda",
+            "msa",
+            "sow",
+            "sla",
+            "employment_agreement",
+            "vendor_agreement",
+            "lease_agreement",
+            "consulting_agreement",
+            "partnership_agreement",
+            "share_agreement",
+            "loan_agreement",
+            "licensing_agreement",
+            "distribution_agreement",
+            "franchise_agreement",
+            "non_compete",
+            "settlement_agreement",
+            "power_of_attorney",
+            "memorandum_of_understanding",
+            "letter_of_intent",
+            "custom"
+          ]
+        },
+        {
+          "name": "description",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "is_active",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "version",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "tags",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "company_id",
+          "type": "link",
+          "required": false,
+          "to": "Company"
+        },
+        {
+          "name": "rules",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "clause_type": {
+              "type": "select",
+              "options": [
+                "standard",
+                "payment",
+                "termination",
+                "liability",
+                "confidentiality",
+                "indemnity",
+                "ip_ownership",
+                "non_compete",
+                "non_solicitation",
+                "force_majeure",
+                "governing_law",
+                "dispute_resolution",
+                "data_protection",
+                "warranty",
+                "sla",
+                "renewal",
+                "other"
+              ]
+            },
+            "preferred_position": {
+              "type": "richtext",
+              "required": true
+            },
+            "fallback_position": {
+              "type": "richtext"
+            },
+            "walk_away_position": {
+              "type": "richtext"
+            },
+            "risk_level": {
+              "type": "select",
+              "options": [
+                "low",
+                "medium",
+                "high",
+                "critical"
+              ]
+            },
+            "auto_accept": {
+              "type": "bool",
+              "default": false
+            },
+            "notes": {
+              "type": "text"
+            }
+          }
+        }
+      ],
+      "permissions": {
+        "admin": [
+          "read",
+          "create",
+          "write",
+          "delete"
+        ],
+        "finance_admin": [
+          "read",
+          "create",
+          "write"
+        ],
+        "finance_user": [
+          "read"
+        ],
+        "hr_admin": [
+          "read",
+          "create",
+          "write"
+        ],
+        "operations_user": [
+          "read"
+        ],
+        "employee": [
+          "read"
+        ]
+      },
+      "children": {
+        "rules": {
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "clause_type": {
+              "type": "select",
+              "options": [
+                "standard",
+                "payment",
+                "termination",
+                "liability",
+                "confidentiality",
+                "indemnity",
+                "ip_ownership",
+                "non_compete",
+                "non_solicitation",
+                "force_majeure",
+                "governing_law",
+                "dispute_resolution",
+                "data_protection",
+                "warranty",
+                "sla",
+                "renewal",
+                "other"
+              ]
+            },
+            "preferred_position": {
+              "type": "richtext",
+              "required": true
+            },
+            "fallback_position": {
+              "type": "richtext"
+            },
+            "walk_away_position": {
+              "type": "richtext"
+            },
+            "risk_level": {
+              "type": "select",
+              "options": [
+                "low",
+                "medium",
+                "high",
+                "critical"
+              ]
+            },
+            "auto_accept": {
+              "type": "bool",
+              "default": false
+            },
+            "notes": {
+              "type": "text"
+            }
+          }
+        }
+      },
+      "number_format": {
+        "default": "PLB-.YYYY.-.#####"
+      }
+    },
+    {
+      "entity": "ContractPreferences",
+      "domain": "contracts",
+      "kind": "config",
+      "behaviors": [],
+      "fields": [
+        {
+          "name": "company_id",
+          "type": "link",
+          "required": false,
+          "to": "Company"
+        },
+        {
+          "name": "default_contract_duration_months",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "auto_renewal_enabled",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "renewal_reminder_days",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "require_legal_review",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "enable_obligation_tracking",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "enable_ai_review",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "default_signing_method",
+          "type": "select",
+          "required": false,
+          "options": [
+            "esign",
+            "wet_ink",
+            "digital_certificate"
+          ]
+        },
+        {
+          "name": "enable_version_control",
+          "type": "bool",
+          "required": false
+        }
+      ],
+      "permissions": {
+        "admin": [
+          "read",
+          "create",
+          "write",
+          "delete"
+        ],
+        "legal_user": [
+          "read",
+          "create",
+          "write"
+        ],
+        "viewer": [
+          "read"
+        ]
+      },
+      "children": {}
+    },
+    {
+      "entity": "ContractAmendment",
+      "domain": "contracts",
+      "kind": "transaction",
+      "behaviors": [
+        "submittable",
+        "numberable"
+      ],
+      "reserved_behaviors": [
+        "commentable",
+        "versionable",
+        "trackable"
+      ],
+      "fields": [
+        {
+          "name": "company_id",
+          "type": "link",
+          "required": false,
+          "to": "Company"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "contract_id",
+          "type": "link",
+          "required": true,
+          "to": "Contract"
+        },
+        {
+          "name": "party_id",
+          "type": "link",
+          "required": false,
+          "to": "Party"
+        },
+        {
+          "name": "amendment_type",
+          "type": "select",
+          "required": false,
+          "options": [
+            "scope_change",
+            "value_change",
+            "term_extension",
+            "clause_modification",
+            "party_change",
+            "termination_terms",
+            "other"
+          ]
+        },
+        {
+          "name": "effective_date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "richtext",
+          "required": true
+        },
+        {
+          "name": "value_impact",
+          "type": "currency",
+          "required": false
+        },
+        {
+          "name": "status",
+          "type": "state",
+          "required": false,
+          "flow": "ContractAmendmentFlow"
+        },
+        {
+          "name": "approved_by",
+          "type": "link",
+          "required": false,
+          "to": "Party"
+        },
+        {
+          "name": "approved_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "notes",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "clause_changes",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "clause_title": {
+              "type": "text",
+              "required": true
+            },
+            "original_text": {
+              "type": "richtext"
+            },
+            "amended_text": {
+              "type": "richtext",
+              "required": true
+            },
+            "change_reason": {
+              "type": "text"
+            }
+          }
+        }
+      ],
+      "permissions": {
+        "admin": [
+          "read",
+          "create",
+          "write",
+          "delete",
+          "submit",
+          "cancel"
+        ],
+        "finance_admin": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "finance_user": [
+          "read",
+          "create",
+          "write"
+        ],
+        "hr_admin": [
+          "read",
+          "create",
+          "write"
+        ],
+        "operations_user": [
+          "read"
+        ],
+        "employee": [
+          "read"
+        ]
+      },
+      "children": {
+        "clause_changes": {
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "clause_title": {
+              "type": "text",
+              "required": true
+            },
+            "original_text": {
+              "type": "richtext"
+            },
+            "amended_text": {
+              "type": "richtext",
+              "required": true
+            },
+            "change_reason": {
+              "type": "text"
+            }
+          }
+        }
+      },
+      "number_format": {
+        "default": "AMD-.YYYY.-.#####"
+      },
+      "flow": {
+        "name": "ContractAmendmentFlow",
+        "states": [
+          "draft",
+          "pending_review",
+          "approved",
+          "executed",
+          "rejected"
+        ],
+        "initial": "draft",
+        "transitions": [
+          {
+            "from": "draft",
+            "to": "pending_review",
+            "action": "Submit for Review",
+            "role": "any"
+          },
+          {
+            "from": "pending_review",
+            "to": "approved",
+            "action": "Approve",
+            "role": "admin"
+          },
+          {
+            "from": "pending_review",
+            "to": "rejected",
+            "action": "Reject",
+            "role": "admin"
+          },
+          {
+            "from": "pending_review",
+            "to": "draft",
+            "action": "Send Back",
+            "role": "admin"
+          },
+          {
+            "from": "approved",
+            "to": "executed",
+            "action": "Execute",
+            "role": "admin"
+          },
+          {
+            "from": "rejected",
+            "to": "draft",
+            "action": "Revise",
+            "role": "any"
+          }
+        ]
+      }
+    },
+	 {
+      "entity": "ContractObligation",
+      "domain": "contracts",
+      "kind": "transaction",
+      "behaviors": [
+        "submittable",
+        "numberable"
+      ],
+      "reserved_behaviors": [
+        "commentable",
+        "assignable",
+        "trackable",
+        "schedulable"
+      ],
+      "fields": [
+        {
+          "name": "company_id",
+          "type": "link",
+          "required": false,
+          "to": "Company"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "contract_id",
+          "type": "link",
+          "required": true,
+          "to": "Contract"
+        },
+        {
+          "name": "party_id",
+          "type": "link",
+          "required": false,
+          "to": "Party"
+        },
+        {
+          "name": "obligation_type",
+          "type": "select",
+          "required": false,
+          "options": [
+            "payment",
+            "delivery",
+            "reporting",
+            "compliance",
+            "service_level",
+            "insurance",
+            "audit",
+            "notification",
+            "other"
+          ]
+        },
+        {
+          "name": "responsible_party",
+          "type": "select",
+          "required": false,
+          "options": [
+            "us",
+            "counterparty",
+            "both"
+          ]
+        },
+        {
+          "name": "owner_id",
+          "type": "link",
+          "required": false,
+          "to": "Party"
+        },
+        {
+          "name": "description",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "due_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "frequency",
+          "type": "select",
+          "required": false,
+          "options": [
+            "one_time",
+            "daily",
+            "weekly",
+            "monthly",
+            "quarterly",
+            "semi_annual",
+            "annual"
+          ]
+        },
+        {
+          "name": "next_due_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "amount",
+          "type": "currency",
+          "required": false
+        },
+        {
+          "name": "priority",
+          "type": "select",
+          "required": false,
+          "options": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "state",
+          "required": false,
+          "flow": "ContractObligationFlow"
+        },
+        {
+          "name": "completed_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "evidence_notes",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "sla_target",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "sla_actual",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "notes",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "checklist_run_id",
+          "type": "link",
+          "required": false,
+          "to": "ChecklistRun"
+        },
+        {
+          "name": "attestation_state",
+          "type": "select",
+          "required": false,
+          "options": [
+            "not_attested",
+            "attested",
+            "superseded"
+          ]
+        },
+        {
+          "name": "last_attested_at",
+          "type": "date",
+          "required": false,
+          "subtype": "datetime"
+        },
+        {
+          "name": "attested_evidence_fingerprint",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "attestations",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "attested_at": {
+              "type": "date",
+              "subtype": "datetime"
+            },
+            "attested_by": {
+              "type": "text"
+            },
+            "attested_by_name": {
+              "type": "text"
+            },
+            "statement": {
+              "type": "text"
+            },
+            "checklist_run_id": {
+              "type": "link",
+              "to": "ChecklistRun"
+            },
+            "checklist_run_name": {
+              "type": "text"
+            },
+            "checklist_run_status": {
+              "type": "text"
+            },
+            "evidence_fingerprint": {
+              "type": "text"
+            },
+            "items_total": {
+              "type": "number"
+            },
+            "items_completed": {
+              "type": "number"
+            },
+            "required_pending": {
+              "type": "number"
+            },
+            "blocker_pending": {
+              "type": "number"
+            },
+            "scope_basis": {
+              "type": "text"
+            },
+            "evidence_tenant_scoped": {
+              "type": "bool",
+              "default": false
+            },
+            "withdrawn": {
+              "type": "bool",
+              "default": false
+            },
+            "withdrawn_at": {
+              "type": "date",
+              "subtype": "datetime"
+            },
+            "withdrawn_by": {
+              "type": "text"
+            },
+            "withdrawn_reason": {
+              "type": "text"
+            }
+          }
+        }
+      ],
+      "permissions": {
+        "admin": [
+          "read",
+          "create",
+          "write",
+          "delete",
+          "submit",
+          "cancel"
+        ],
+        "finance_admin": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "finance_user": [
+          "read",
+          "create",
+          "write"
+        ],
+        "hr_admin": [
+          "read",
+          "create",
+          "write"
+        ],
+        "legal_user": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "operations_user": [
+          "read",
+          "create",
+          "write"
+        ],
+        "employee": [
+          "read"
+        ]
+      },
+      "children": {
+        "attestations": {
+          "shape": {
+            "attested_at": {
+              "type": "date",
+              "subtype": "datetime"
+            },
+            "attested_by": {
+              "type": "text"
+            },
+            "attested_by_name": {
+              "type": "text"
+            },
+            "statement": {
+              "type": "text"
+            },
+            "checklist_run_id": {
+              "type": "link",
+              "to": "ChecklistRun"
+            },
+            "checklist_run_name": {
+              "type": "text"
+            },
+            "checklist_run_status": {
+              "type": "text"
+            },
+            "evidence_fingerprint": {
+              "type": "text"
+            },
+            "items_total": {
+              "type": "number"
+            },
+            "items_completed": {
+              "type": "number"
+            },
+            "required_pending": {
+              "type": "number"
+            },
+            "blocker_pending": {
+              "type": "number"
+            },
+            "scope_basis": {
+              "type": "text"
+            },
+            "evidence_tenant_scoped": {
+              "type": "bool",
+              "default": false
+            },
+            "withdrawn": {
+              "type": "bool",
+              "default": false
+            },
+            "withdrawn_at": {
+              "type": "date",
+              "subtype": "datetime"
+            },
+            "withdrawn_by": {
+              "type": "text"
+            },
+            "withdrawn_reason": {
+              "type": "text"
+            }
+          }
+        }
+      },
+      "number_format": {
+        "default": "OBL-.YYYY.-.#####"
+      },
+      "flow": {
+        "name": "ContractObligationFlow",
+        "states": [
+          "pending",
+          "in_progress",
+          "completed",
+          "overdue",
+          "waived",
+          "breached"
+        ],
+        "initial": "pending",
+        "transitions": [
+          {
+            "from": "pending",
+            "to": "in_progress",
+            "action": "Start",
+            "role": "any"
+          },
+          {
+            "from": "in_progress",
+            "to": "completed",
+            "action": "Mark Complete",
+            "role": "any"
+          },
+          {
+            "from": "in_progress",
+            "to": "overdue",
+            "action": "Mark Overdue",
+            "role": "any"
+          },
+          {
+            "from": "pending",
+            "to": "overdue",
+            "action": "Mark Overdue",
+            "role": "any"
+          },
+          {
+            "from": "overdue",
+            "to": "completed",
+            "action": "Complete Late",
+            "role": "any"
+          },
+          {
+            "from": "in_progress",
+            "to": "waived",
+            "action": "Waive",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by"
+            }
+          },
+          {
+            "from": "in_progress",
+            "to": "breached",
+            "action": "Mark Breached",
+            "role": "admin"
+          },
+          {
+            "from": "overdue",
+            "to": "breached",
+            "action": "Mark Breached",
+            "role": "admin"
+          },
+          {
+            "from": "pending",
+            "to": "waived",
+            "action": "Waive",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "entity": "ContractRenewal",
+      "domain": "contracts",
+      "kind": "transaction",
+      "behaviors": [
+        "submittable",
+        "numberable"
+      ],
+      "reserved_behaviors": [
+        "commentable",
+        "trackable"
+      ],
+      "fields": [
+        {
+          "name": "company_id",
+          "type": "link",
+          "required": false,
+          "to": "Company"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "contract_id",
+          "type": "link",
+          "required": true,
+          "to": "Contract"
+        },
+        {
+          "name": "party_id",
+          "type": "link",
+          "required": false,
+          "to": "Party"
+        },
+        {
+          "name": "previous_end_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "new_start_date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "new_end_date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "previous_value",
+          "type": "currency",
+          "required": false
+        },
+        {
+          "name": "new_value",
+          "type": "currency",
+          "required": false
+        },
+        {
+          "name": "value_change_pct",
+          "type": "number",
+          "required": false,
+          "computed": "((new_value - previous_value) / previous_value) * 100"
+        },
+        {
+          "name": "renewal_type",
+          "type": "select",
+          "required": false,
+          "options": [
+            "standard",
+            "renegotiated",
+            "auto",
+            "extended"
+          ]
+        },
+        {
+          "name": "approved_by",
+          "type": "link",
+          "required": false,
+          "to": "Party"
+        },
+        {
+          "name": "approved_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "status",
+          "type": "state",
+          "required": false,
+          "flow": "ContractRenewalFlow"
+        },
+        {
+          "name": "notes",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "terms_changed",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "change_summary",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "decision",
+          "type": "select",
+          "required": false,
+          "options": [
+            "undecided",
+            "renew",
+            "renegotiate",
+            "let_expire",
+            "defer"
+          ]
+        },
+        {
+          "name": "decision_rationale",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "decided_at",
+          "type": "date",
+          "required": false,
+          "subtype": "datetime"
+        },
+        {
+          "name": "decided_by",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "decision_basis",
+          "type": "code",
+          "required": false
+        },
+        {
+          "name": "decision_basis_fingerprint",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "decision_evidence_gaps",
+          "type": "code",
+          "required": false
+        }
+      ],
+      "permissions": {
+        "admin": [
+          "read",
+          "create",
+          "write",
+          "delete",
+          "submit",
+          "cancel"
+        ],
+        "finance_admin": [
+          "read",
+          "create",
+          "write",
+          "submit",
+          "cancel"
+        ],
+        "finance_user": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "hr_admin": [
+          "read",
+          "create",
+          "write"
+        ],
+        "legal_user": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "operations_user": [
+          "read"
+        ],
+        "employee": [
+          "read"
+        ]
+      },
+      "children": {},
+      "number_format": {
+        "default": "RNW-.YYYY.-.#####"
+      },
+      "flow": {
+        "name": "ContractRenewalFlow",
+        "states": [
+          "draft",
+          "pending_approval",
+          "approved",
+          "completed",
+          "rejected"
+        ],
+        "initial": "draft",
+        "transitions": [
+          {
+            "from": "draft",
+            "to": "pending_approval",
+            "action": "Submit for Approval",
+            "role": "any"
+          },
+          {
+            "from": "pending_approval",
+            "to": "approved",
+            "action": "Approve",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by"
+            }
+          },
+          {
+            "from": "pending_approval",
+            "to": "rejected",
+            "action": "Reject",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by"
+            }
+          },
+          {
+            "from": "pending_approval",
+            "to": "draft",
+            "action": "Send Back",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by"
+            }
+          },
+          {
+            "from": "approved",
+            "to": "completed",
+            "action": "Complete Renewal",
+            "role": "admin"
+          },
+          {
+            "from": "rejected",
+            "to": "draft",
+            "action": "Revise",
+            "role": "any"
+          }
+        ]
+      }
+    },
+    {
+      "entity": "ContractClause",
+      "domain": "contracts",
+      "kind": "record",
+      "behaviors": [
+        "numberable"
+      ],
+      "reserved_behaviors": [
+        "commentable",
+        "versionable"
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "content",
+          "type": "richtext",
+          "required": true
+        },
+        {
+          "name": "clause_type",
+          "type": "select",
+          "required": false,
+          "options": [
+            "standard",
+            "payment",
+            "termination",
+            "liability",
+            "confidentiality",
+            "indemnity",
+            "ip_ownership",
+            "non_compete",
+            "non_solicitation",
+            "force_majeure",
+            "governing_law",
+            "dispute_resolution",
+            "data_protection",
+            "warranty",
+            "sla",
+            "renewal",
+            "other"
+          ]
+        },
+        {
+          "name": "category",
+          "type": "select",
+          "required": false,
+          "options": [
+            "general",
+            "sales",
+            "procurement",
+            "employment",
+            "nda",
+            "real_estate",
+            "technology",
+            "insurance",
+            "consulting",
+            "other"
+          ]
+        },
+        {
+          "name": "risk_level",
+          "type": "select",
+          "required": false,
+          "options": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        {
+          "name": "is_standard",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "is_active",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "version",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "jurisdiction",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "tags",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "notes",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "usage_count",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "company_id",
+          "type": "link",
+          "required": false,
+          "to": "Company"
+        }
+      ],
+      "permissions": {
+        "admin": [
+          "read",
+          "create",
+          "write",
+          "delete"
+        ],
+        "finance_admin": [
+          "read",
+          "create",
+          "write"
+        ],
+        "finance_user": [
+          "read",
+          "create",
+          "write"
+        ],
+        "hr_admin": [
+          "read",
+          "create",
+          "write"
+        ],
+        "operations_user": [
+          "read"
+        ],
+        "employee": [
+          "read"
+        ]
+      },
+      "children": {},
+      "number_format": {
+        "default": "CLS-.YYYY.-.#####"
+      }
+    },
+    {
+      "entity": "ContractClauseDeviation",
+      "domain": "contracts",
+      "kind": "transaction",
+      "behaviors": [
+        "submittable",
+        "numberable"
+      ],
+      "reserved_behaviors": [
+        "commentable",
+        "trackable"
+      ],
+      "fields": [
+        {
+          "name": "company_id",
+          "type": "link",
+          "required": false,
+          "to": "Company"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "document_id",
+          "type": "link",
+          "required": true,
+          "to": "ContractDocument"
+        },
+        {
+          "name": "contract_id",
+          "type": "link",
+          "required": false,
+          "to": "Contract"
+        },
+        {
+          "name": "clause_id",
+          "type": "link",
+          "required": false,
+          "to": "ContractClause"
+        },
+        {
+          "name": "clause_name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "clause_key",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "deviation_type",
+          "type": "select",
+          "required": true,
+          "options": [
+            "modified_standard",
+            "non_standard_added",
+            "standard_omitted",
+            "bespoke"
+          ]
+        },
+        {
+          "name": "risk_level",
+          "type": "select",
+          "required": false,
+          "options": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        {
+          "name": "standard_content",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "standard_clause_version",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "proposed_content",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "rationale",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "base_document_version",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "base_revision_fingerprint",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "approved_revision_fingerprint",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "coverage_state",
+          "type": "select",
+          "required": false,
+          "options": [
+            "not_approved",
+            "covers_current",
+            "superseded_by_edit",
+            "clause_removed"
+          ]
+        },
+        {
+          "name": "coverage_checked_at",
+          "type": "date",
+          "required": false,
+          "subtype": "datetime"
+        },
+        {
+          "name": "approval_request_id",
+          "type": "link",
+          "required": false,
+          "to": "ApprovalRequest"
+        },
+        {
+          "name": "approval_status",
+          "type": "select",
+          "required": false,
+          "options": [
+            "not_required",
+            "pending_approval",
+            "approved",
+            "rejected"
+          ]
+        },
+        {
+          "name": "approved_at",
+          "type": "date",
+          "required": false,
+          "subtype": "datetime"
+        },
+        {
+          "name": "approved_by",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "status",
+          "type": "state",
+          "required": false,
+          "flow": "ContractClauseDeviationFlow"
+        },
+        {
+          "name": "notes",
+          "type": "richtext",
+          "required": false
+        }
+      ],
+      "permissions": {
+        "admin": [
+          "read",
+          "create",
+          "write",
+          "delete",
+          "submit",
+          "cancel"
+        ],
+        "finance_admin": [
+          "read",
+          "create",
+          "write",
+          "submit",
+          "cancel"
+        ],
+        "finance_user": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "hr_admin": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "legal_user": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "operations_user": [
+          "read",
+          "create",
+          "write"
+        ],
+        "employee": [
+          "read"
+        ]
+      },
+      "children": {},
+      "number_format": {
+        "default": "DEV-.YYYY.-.#####"
+      },
+      "flow": {
+        "name": "ContractClauseDeviationFlow",
+        "states": [
+          "draft",
+          "pending_approval",
+          "approved",
+          "rejected",
+          "withdrawn"
+        ],
+        "initial": "draft",
+        "transitions": [
+          {
+            "from": "draft",
+            "to": "pending_approval",
+            "action": "Submit for Approval",
+            "role": "any"
+          },
+          {
+            "from": "pending_approval",
+            "to": "approved",
+            "action": "Approve",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by",
+              "expression": "approval_status != 'pending_approval'",
+              "message": "An approval request is open for this clause deviation. Decide it in Approvals (approve or reject), or recall/cancel the request there; the deviation follows the request."
+            }
+          },
+          {
+            "from": "pending_approval",
+            "to": "rejected",
+            "action": "Reject",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by",
+              "expression": "approval_status != 'pending_approval'",
+              "message": "An approval request is open for this clause deviation. Decide it in Approvals (approve or reject), or recall/cancel the request there; the deviation follows the request."
+            }
+          },
+          {
+            "from": "pending_approval",
+            "to": "draft",
+            "action": "Send Back",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by",
+              "expression": "approval_status != 'pending_approval'",
+              "message": "An approval request is open for this clause deviation. Decide it in Approvals (approve or reject), or recall/cancel the request there; the deviation follows the request."
+            }
+          },
+          {
+            "from": "rejected",
+            "to": "draft",
+            "action": "Revise",
+            "role": "any"
+          },
+          {
+            "from": "draft",
+            "to": "withdrawn",
+            "action": "Withdraw",
+            "role": "any"
+          },
+          {
+            "from": "approved",
+            "to": "withdrawn",
+            "action": "Withdraw",
+            "role": "admin"
+          }
+        ]
+      }
+    },
+    {
+      "entity": "ContractDocument",
+      "domain": "contracts",
+      "kind": "transaction",
+      "behaviors": [
+        "submittable",
+        "numberable"
+      ],
+      "reserved_behaviors": [
+        "commentable",
+        "versionable",
+        "trackable",
+        "emailable"
+      ],
+      "fields": [
+        {
+          "name": "company_id",
+          "type": "link",
+          "required": false,
+          "to": "Company"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "contract_id",
+          "type": "link",
+          "required": false,
+          "to": "Contract"
+        },
+        {
+          "name": "document_type",
+          "type": "select",
+          "required": true,
+          "options": [
+            "nda",
+            "msa",
+            "sow",
+            "sla",
+            "employment_agreement",
+            "vendor_agreement",
+            "lease_agreement",
+            "consulting_agreement",
+            "partnership_agreement",
+            "share_agreement",
+            "loan_agreement",
+            "licensing_agreement",
+            "distribution_agreement",
+            "franchise_agreement",
+            "non_compete",
+            "settlement_agreement",
+            "power_of_attorney",
+            "memorandum_of_understanding",
+            "letter_of_intent",
+            "custom"
+          ]
+        },
+        {
+          "name": "template_id",
+          "type": "link",
+          "required": false,
+          "to": "ContractTemplate"
+        },
+        {
+          "name": "party_id",
+          "type": "link",
+          "required": true,
+          "to": "Party"
+        },
+        {
+          "name": "second_party_id",
+          "type": "link",
+          "required": false,
+          "to": "Party"
+        },
+        {
+          "name": "content",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "variables",
+          "type": "code",
+          "required": false
+        },
+        {
+          "name": "version",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "esign_document_id",
+          "type": "link",
+          "required": false,
+          "to": "EsignDocument"
+        },
+        {
+          "name": "drive_file_id",
+          "type": "link",
+          "required": false,
+          "to": "FileAttachment"
+        },
+        {
+          "name": "generated_by",
+          "type": "select",
+          "required": false,
+          "options": [
+            "manual",
+            "template",
+            "ai_draft"
+          ]
+        },
+        {
+          "name": "ai_prompt",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "risk_score",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "risk_summary",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "status",
+          "type": "state",
+          "required": false,
+          "flow": "ContractDocumentFlow"
+        },
+        {
+          "name": "signed_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "notes",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "clauses_used",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "clause_id": {
+              "type": "link",
+              "to": "ContractClause"
+            },
+            "clause_name": {
+              "type": "text"
+            },
+            "content_override": {
+              "type": "richtext"
+            },
+            "is_modified": {
+              "type": "bool",
+              "default": false
+            }
+          }
+        },
+        {
+          "name": "review_comments",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "reviewer": {
+              "type": "text"
+            },
+            "comment": {
+              "type": "richtext",
+              "required": true
+            },
+            "section": {
+              "type": "text"
+            },
+            "resolved": {
+              "type": "bool",
+              "default": false
+            },
+            "created_at": {
+              "type": "date"
+            }
+          }
+        },
+        {
+          "name": "versions",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "version_number": {
+              "type": "number"
+            },
+            "content_snapshot": {
+              "type": "richtext"
+            },
+            "changed_by": {
+              "type": "text"
+            },
+            "changed_at": {
+              "type": "date"
+            },
+            "change_summary": {
+              "type": "text"
+            }
+          }
+        }
+      ],
+      "permissions": {
+        "admin": [
+          "read",
+          "create",
+          "write",
+          "delete",
+          "submit",
+          "cancel"
+        ],
+        "finance_admin": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "finance_user": [
+          "read",
+          "create",
+          "write"
+        ],
+        "hr_admin": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "legal_user": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "operations_user": [
+          "read",
+          "create",
+          "write"
+        ],
+        "employee": [
+          "read"
+        ]
+      },
+      "children": {
+        "clauses_used": {
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "clause_id": {
+              "type": "link",
+              "to": "ContractClause"
+            },
+            "clause_name": {
+              "type": "text"
+            },
+            "content_override": {
+              "type": "richtext"
+            },
+            "is_modified": {
+              "type": "bool",
+              "default": false
+            }
+          }
+        },
+        "review_comments": {
+          "shape": {
+            "reviewer": {
+              "type": "text"
+            },
+            "comment": {
+              "type": "richtext",
+              "required": true
+            },
+            "section": {
+              "type": "text"
+            },
+            "resolved": {
+              "type": "bool",
+              "default": false
+            },
+            "created_at": {
+              "type": "date"
+            }
+          }
+        },
+        "versions": {
+          "shape": {
+            "version_number": {
+              "type": "number"
+            },
+            "content_snapshot": {
+              "type": "richtext"
+            },
+            "changed_by": {
+              "type": "text"
+            },
+            "changed_at": {
+              "type": "date"
+            },
+            "change_summary": {
+              "type": "text"
+            }
+          }
+        }
+      },
+      "number_format": {
+        "default": "DOC-.YYYY.-.#####"
+      },
+      "flow": {
+        "name": "ContractDocumentFlow",
+        "states": [
+          "draft",
+          "in_review",
+          "approved",
+          "sent_for_signature",
+          "signed",
+          "archived"
+        ],
+        "initial": "draft",
+        "transitions": [
+          {
+            "from": "draft",
+            "to": "in_review",
+            "action": "Submit for Review",
+            "role": "any"
+          },
+          {
+            "from": "in_review",
+            "to": "approved",
+            "action": "Approve",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by"
+            }
+          },
+          {
+            "from": "in_review",
+            "to": "draft",
+            "action": "Request Changes",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by"
+            }
+          },
+          {
+            "from": "approved",
+            "to": "sent_for_signature",
+            "action": "Send for Signature",
+            "role": "any"
+          },
+          {
+            "from": "sent_for_signature",
+            "to": "signed",
+            "action": "Mark Signed",
+            "role": "any"
+          },
+          {
+            "from": "signed",
+            "to": "archived",
+            "action": "Archive",
+            "role": "any"
+          },
+          {
+            "from": "draft",
+            "to": "archived",
+            "action": "Archive Draft",
+            "role": "any"
+          }
+        ]
+      }
+    },
+    {
+      "entity": "ContractTemplate",
+      "domain": "contracts",
+      "kind": "record",
+      "behaviors": [
+        "numberable"
+      ],
+      "reserved_behaviors": [
+        "commentable",
+        "versionable"
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "contract_type",
+          "type": "select",
+          "required": false,
+          "options": [
+            "vendor",
+            "lease",
+            "service",
+            "employment",
+            "insurance",
+            "nda",
+            "other"
+          ]
+        },
+        {
+          "name": "category",
+          "type": "select",
+          "required": false,
+          "options": [
+            "real_estate",
+            "equipment",
+            "technology",
+            "professional_services",
+            "insurance",
+            "utilities",
+            "supplies",
+            "other"
+          ]
+        },
+        {
+          "name": "default_duration_months",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "default_renewal_notice_days",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "default_auto_renew",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "document_content",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "variable_definitions",
+          "type": "code",
+          "required": false
+        },
+        {
+          "name": "playbook_id",
+          "type": "link",
+          "required": false,
+          "to": "ContractPlaybook"
+        },
+        {
+          "name": "jurisdiction",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "estimated_duration_to_sign",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "is_active",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "version",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "tags",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "company_id",
+          "type": "link",
+          "required": false,
+          "to": "Company"
+        },
+        {
+          "name": "clauses",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "title": {
+              "type": "text",
+              "required": true
+            },
+            "content": {
+              "type": "richtext"
+            },
+            "clause_type": {
+              "type": "select",
+              "options": [
+                "standard",
+                "payment",
+                "termination",
+                "liability",
+                "confidentiality",
+                "renewal",
+                "sla",
+                "other"
+              ]
+            },
+            "is_critical": {
+              "type": "bool",
+              "default": false
+            }
+          }
+        },
+        {
+          "name": "milestones",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "title": {
+              "type": "text",
+              "required": true
+            },
+            "offset_days": {
+              "type": "number"
+            },
+            "amount_formula": {
+              "type": "text"
+            },
+            "milestone_type": {
+              "type": "select",
+              "options": [
+                "payment",
+                "delivery",
+                "review",
+                "renewal",
+                "other"
+              ]
+            }
+          }
+        }
+      ],
+      "permissions": {
+        "admin": [
+          "read",
+          "create",
+          "write",
+          "delete"
+        ],
+        "finance_admin": [
+          "read",
+          "create",
+          "write",
+          "delete"
+        ],
+        "finance_user": [
+          "read",
+          "create",
+          "write"
+        ],
+        "hr_admin": [
+          "read",
+          "create",
+          "write"
+        ],
+        "operations_user": [
+          "read"
+        ],
+        "employee": [
+          "read"
+        ]
+      },
+      "children": {
+        "clauses": {
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "title": {
+              "type": "text",
+              "required": true
+            },
+            "content": {
+              "type": "richtext"
+            },
+            "clause_type": {
+              "type": "select",
+              "options": [
+                "standard",
+                "payment",
+                "termination",
+                "liability",
+                "confidentiality",
+                "renewal",
+                "sla",
+                "other"
+              ]
+            },
+            "is_critical": {
+              "type": "bool",
+              "default": false
+            }
+          }
+        },
+        "milestones": {
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "title": {
+              "type": "text",
+              "required": true
+            },
+            "offset_days": {
+              "type": "number"
+            },
+            "amount_formula": {
+              "type": "text"
+            },
+            "milestone_type": {
+              "type": "select",
+              "options": [
+                "payment",
+                "delivery",
+                "review",
+                "renewal",
+                "other"
+              ]
+            }
+          }
+        }
+      },
+      "number_format": {
+        "default": "CTPL-.YYYY.-.#####"
+      }
+    },
+	{
+      "entity": "Contract",
+      "domain": "contracts",
+      "kind": "transaction",
+      "behaviors": [
+        "submittable",
+        "numberable"
+      ],
+      "reserved_behaviors": [
+        "commentable",
+        "versionable",
+        "assignable",
+        "trackable",
+        "schedulable"
+      ],
+      "fields": [
+        {
+          "name": "company_id",
+          "type": "link",
+          "required": false,
+          "to": "Company"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "contract_type",
+          "type": "select",
+          "required": true,
+          "options": [
+            "vendor",
+            "lease",
+            "service",
+            "employment",
+            "insurance",
+            "nda",
+            "other"
+          ]
+        },
+        {
+          "name": "party_id",
+          "type": "link",
+          "required": true,
+          "to": "Party"
+        },
+        {
+          "name": "department_id",
+          "type": "link",
+          "required": false,
+          "to": "Department"
+        },
+        {
+          "name": "owner_id",
+          "type": "link",
+          "required": false,
+          "to": "Party"
+        },
+        {
+          "name": "start_date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "end_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "value",
+          "type": "currency",
+          "required": false
+        },
+        {
+          "name": "currency",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "payment_frequency",
+          "type": "select",
+          "required": false,
+          "options": [
+            "one_time",
+            "monthly",
+            "quarterly",
+            "semi_annual",
+            "annual"
+          ]
+        },
+        {
+          "name": "auto_renew",
+          "type": "bool",
+          "required": false
+        },
+        {
+          "name": "renewal_notice_days",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "renewal_terms",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "termination_notice_days",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "signed_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "effective_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "priority",
+          "type": "select",
+          "required": false,
+          "options": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        {
+          "name": "category",
+          "type": "select",
+          "required": false,
+          "options": [
+            "real_estate",
+            "equipment",
+            "technology",
+            "professional_services",
+            "insurance",
+            "utilities",
+            "supplies",
+            "other"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "state",
+          "required": false,
+          "flow": "ContractFlow"
+        },
+        {
+          "name": "days_to_expiry",
+          "type": "number",
+          "required": false,
+          "computed": "datediff(end_date, today())"
+        },
+        {
+          "name": "is_expiring_soon",
+          "type": "bool",
+          "required": false,
+          "computed": "status == 'active' && days_to_expiry <= renewal_notice_days && days_to_expiry > 0"
+        },
+        {
+          "name": "total_renewals",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "last_renewed_date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "esign_document_id",
+          "type": "link",
+          "required": false,
+          "to": "EsignDocument"
+        },
+        {
+          "name": "drive_folder_id",
+          "type": "link",
+          "required": false,
+          "to": "DriveFolder"
+        },
+        {
+          "name": "deal_id",
+          "type": "link",
+          "required": false,
+          "to": "Deal"
+        },
+        {
+          "name": "project_id",
+          "type": "link",
+          "required": false,
+          "to": "Project"
+        },
+        {
+          "name": "approval_request_id",
+          "type": "link",
+          "required": false,
+          "to": "ApprovalRequest"
+        },
+        {
+          "name": "checklist_template_id",
+          "type": "link",
+          "required": false,
+          "to": "ChecklistTemplate"
+        },
+        {
+          "name": "risk_score",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "risk_summary",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "total_obligations",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "obligations_completed",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "obligation_compliance_pct",
+          "type": "number",
+          "required": false,
+          "computed": "ifelse(total_obligations > 0, round(obligations_completed / max(total_obligations, 1) * 100, 2), 100)"
+        },
+        {
+          "name": "total_amendments",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "tags",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "notes",
+          "type": "richtext",
+          "required": false
+        },
+        {
+          "name": "approval_status",
+          "type": "select",
+          "required": false,
+          "options": [
+            "not_required",
+            "pending_approval",
+            "approved",
+            "rejected"
+          ]
+        },
+        {
+          "name": "clauses",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "title": {
+              "type": "text",
+              "required": true
+            },
+            "content": {
+              "type": "richtext"
+            },
+            "clause_type": {
+              "type": "select",
+              "options": [
+                "standard",
+                "payment",
+                "termination",
+                "liability",
+                "confidentiality",
+                "renewal",
+                "sla",
+                "other"
+              ]
+            },
+            "is_critical": {
+              "type": "bool",
+              "default": false
+            }
+          }
+        },
+        {
+          "name": "milestones",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "title": {
+              "type": "text",
+              "required": true
+            },
+            "due_date": {
+              "type": "date",
+              "required": true
+            },
+            "amount": {
+              "type": "currency"
+            },
+            "milestone_type": {
+              "type": "select",
+              "options": [
+                "payment",
+                "delivery",
+                "review",
+                "renewal",
+                "other"
+              ]
+            },
+            "completed": {
+              "type": "bool",
+              "default": false
+            },
+            "completed_date": {
+              "type": "date"
+            },
+            "invoice_generated": {
+              "type": "bool",
+              "default": false
+            },
+            "invoice_id": {
+              "type": "link",
+              "to": "Invoice",
+              "_comment": "contracts-OP3 — WHICH invoice a completed payment milestone raised. schemas/_scripts/contracts/milestone_invoicing.py:105 has always WRITTEN this key and the shape never declared it, so the one real contract→money link the product already had was invisible to every declared-shape reader: the form builder, the children validator and the renewal forecast alike. `invoice_generated` above says only THAT one was raised. Declaring it is not a new capability, it is the existing one made readable."
+            },
+            "notes": {
+              "type": "text"
+            }
+          }
+        },
+        {
+          "name": "documents",
+          "type": "children",
+          "required": false,
+          "shape": {
+            "name": {
+              "type": "text",
+              "required": true
+            },
+            "file_url": {
+              "type": "text"
+            },
+            "version": {
+              "type": "number",
+              "default": 1
+            },
+            "uploaded_at": {
+              "type": "date"
+            },
+            "doc_type": {
+              "type": "select",
+              "options": [
+                "original",
+                "amendment",
+                "addendum",
+                "renewal",
+                "termination",
+                "other"
+              ]
+            }
+          }
+        }
+      ],
+      "permissions": {
+        "admin": [
+          "read",
+          "create",
+          "write",
+          "delete",
+          "submit",
+          "cancel"
+        ],
+        "finance_admin": [
+          "read",
+          "create",
+          "write",
+          "submit",
+          "cancel"
+        ],
+        "finance_user": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "hr_admin": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "legal_user": [
+          "read",
+          "create",
+          "write",
+          "submit"
+        ],
+        "operations_user": [
+          "read",
+          "create",
+          "write"
+        ],
+        "employee": [
+          "read"
+        ]
+      },
+      "children": {
+        "clauses": {
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "title": {
+              "type": "text",
+              "required": true
+            },
+            "content": {
+              "type": "richtext"
+            },
+            "clause_type": {
+              "type": "select",
+              "options": [
+                "standard",
+                "payment",
+                "termination",
+                "liability",
+                "confidentiality",
+                "renewal",
+                "sla",
+                "other"
+              ]
+            },
+            "is_critical": {
+              "type": "bool",
+              "default": false
+            }
+          }
+        },
+        "milestones": {
+          "shape": {
+            "order": {
+              "type": "number"
+            },
+            "title": {
+              "type": "text",
+              "required": true
+            },
+            "due_date": {
+              "type": "date",
+              "required": true
+            },
+            "amount": {
+              "type": "currency"
+            },
+            "milestone_type": {
+              "type": "select",
+              "options": [
+                "payment",
+                "delivery",
+                "review",
+                "renewal",
+                "other"
+              ]
+            },
+            "completed": {
+              "type": "bool",
+              "default": false
+            },
+            "completed_date": {
+              "type": "date"
+            },
+            "invoice_generated": {
+              "type": "bool",
+              "default": false
+            },
+            "invoice_id": {
+              "type": "link",
+              "to": "Invoice",
+              "_comment": "contracts-OP3 — WHICH invoice a completed payment milestone raised. schemas/_scripts/contracts/milestone_invoicing.py:105 has always WRITTEN this key and the shape never declared it, so the one real contract→money link the product already had was invisible to every declared-shape reader: the form builder, the children validator and the renewal forecast alike. `invoice_generated` above says only THAT one was raised. Declaring it is not a new capability, it is the existing one made readable."
+            },
+            "notes": {
+              "type": "text"
+            }
+          }
+        },
+        "documents": {
+          "shape": {
+            "name": {
+              "type": "text",
+              "required": true
+            },
+            "file_url": {
+              "type": "text"
+            },
+            "version": {
+              "type": "number",
+              "default": 1
+            },
+            "uploaded_at": {
+              "type": "date"
+            },
+            "doc_type": {
+              "type": "select",
+              "options": [
+                "original",
+                "amendment",
+                "addendum",
+                "renewal",
+                "termination",
+                "other"
+              ]
+            }
+          }
+        }
+      },
+      "number_format": {
+        "default": "CTR-.YYYY.-.#####"
+      },
+      "flow": {
+        "name": "ContractFlow",
+        "states": [
+          "draft",
+          "pending_approval",
+          "active",
+          "expiring_soon",
+          "expired",
+          "renewed",
+          "terminated",
+          "cancelled"
+        ],
+        "initial": "draft",
+        "transitions": [
+          {
+            "from": "draft",
+            "to": "pending_approval",
+            "action": "Submit for Approval",
+            "role": "any"
+          },
+          {
+            "from": "pending_approval",
+            "to": "active",
+            "action": "Approve & Activate",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by",
+              "expression": "approval_status != 'pending_approval'",
+              "message": "An approval request is open for this contract. Decide it in Approvals (approve or reject), or recall/cancel the request there; the contract follows the request."
+            }
+          },
+          {
+            "from": "pending_approval",
+            "to": "draft",
+            "action": "Send Back",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by",
+              "expression": "approval_status != 'pending_approval'",
+              "message": "An approval request is open for this contract. Decide it in Approvals (approve or reject), or recall/cancel the request there; the contract follows the request."
+            }
+          },
+          {
+            "from": "active",
+            "to": "expiring_soon",
+            "action": "Mark Expiring",
+            "role": "any"
+          },
+          {
+            "from": "active",
+            "to": "terminated",
+            "action": "Terminate",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by"
+            }
+          },
+          {
+            "from": "expiring_soon",
+            "to": "renewed",
+            "action": "Renew",
+            "role": "admin"
+          },
+          {
+            "from": "expiring_soon",
+            "to": "expired",
+            "action": "Mark Expired",
+            "role": "any"
+          },
+          {
+            "from": "expiring_soon",
+            "to": "terminated",
+            "action": "Terminate",
+            "role": "admin",
+            "condition": {
+              "actor_not": "created_by"
+            }
+          },
+          {
+            "from": "expired",
+            "to": "renewed",
+            "action": "Renew",
+            "role": "admin"
+          },
+          {
+            "from": "renewed",
+            "to": "active",
+            "action": "Activate Renewed",
+            "role": "admin"
+          },
+          {
+            "from": "draft",
+            "to": "cancelled",
+			
+			
+            "action": "Cancel",
+            "role": "admin"
+          },
+          {
+            "from": "pending_approval",
+            "to": "cancelled",
+            "action": "Cancel",
+            "role": "admin",
+            "condition": {
+              "expression": "approval_status != 'pending_approval'",
+              "message": "An approval request is open for this contract. Decide it in Approvals (approve or reject), or recall/cancel the request there; the contract follows the request."
+            }
+          }
+        ]
+      }
+    }

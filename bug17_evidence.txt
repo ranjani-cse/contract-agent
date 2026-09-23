@@ -1,0 +1,47 @@
+Tool: ContractRenewal.create
+Arguments: {
+  "data": {
+    "title": "Sanity-test renewal",
+    "contract_id": "00000000-0000-0000-0000-000000000000",
+    "new_start_date": "2027-01-01",
+    "new_end_date": "2028-01-01"
+  }
+}
+
+Response:
+{
+  "http_status": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "Invalid tool arguments.",
+      "data": {
+        "code": "invalid_arguments",
+        "errors": [
+          {
+            "field": "/title",
+            "message": "title is required."
+          },
+          {
+            "field": "/contract_id",
+            "message": "contract_id is required."
+          },
+          {
+            "field": "/new_start_date",
+            "message": "new_start_date is required."
+          },
+          {
+            "field": "/new_end_date",
+            "message": "new_end_date is required."
+          },
+          {
+            "field": "/data",
+            "message": "data is not an accepted argument of this tool."
+          }
+        ]
+      }
+    }
+  }
+}

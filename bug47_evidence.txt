@@ -1,0 +1,24 @@
+Tool: Contract.mark_expired
+Arguments: {}
+
+Response:
+{
+  "http_status": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "Invalid tool arguments.",
+      "data": {
+        "code": "invalid_arguments",
+        "errors": [
+          {
+            "field": "/id",
+            "message": "id is required."
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+Tool: endpoint.contracts.propose_clause_deviation
+Arguments: {}
+
+Response:
+{
+  "http_status": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "Invalid tool arguments.",
+      "data": {
+        "code": "invalid_arguments",
+        "errors": [
+          {
+            "field": "/document_id",
+            "message": "document_id is required."
+          },
+          {
+            "field": "/clause_key",
+            "message": "clause_key is required."
+          },
+          {
+            "field": "/rationale",
+            "message": "rationale is required."
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+Tool: ContractClauseDeviation.create
+Arguments: {
+  "data": {}
+}
+
+Response:
+{
+  "http_status": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "Invalid tool arguments.",
+      "data": {
+        "code": "invalid_arguments",
+        "errors": [
+          {
+            "field": "/title",
+            "message": "title is required."
+          },
+          {
+            "field": "/document_id",
+            "message": "document_id is required."
+          },
+          {
+            "field": "/clause_name",
+            "message": "clause_name is required."
+          },
+          {
+            "field": "/deviation_type",
+            "message": "deviation_type is required."
+          },
+          {
+            "field": "/data",
+            "message": "data is not an accepted argument of this tool."
+          }
+        ]
+      }
+    }
+  }
+}
