@@ -1,0 +1,26 @@
+Bug 10 evidence: tools.search returns a tool not in the seat's tools/list;
+calling it reports invalid_arguments instead of tool_not_available.
+
+Step 1 — tools.search {"query": "salary"} returned:
+  {"name": "endpoint.people_directory",
+   "module": "people-directory",
+   "risk": "read",
+   "description": "N146. A names-only people directory any member may read..."}
+
+Step 2 — endpoint.people_directory is NOT in this seat's tools/list:
+  grep people_directory all_tools.txt  -> no matches
+  (239 tools in this seat, none matching people_directory)
+
+Step 3 — calling endpoint.people_directory with {"limit": 3} returned:
+  {"_error": "Invalid tool arguments. (invalid_arguments)"}
+
+Compare: SalarySlip.list (also not in this seat's tools/list) correctly
+returns tool_not_available when called.
+
+Repro:
+  python3 -c "
+  from agent.mcp_client import call_tool, is_failure, failure_reason
+  r = call_tool('endpoint.people_directory', {'limit': 3})
+  print('is_failure:', is_failure(r))
+  print('reason:', failure_reason(r))
+  "
