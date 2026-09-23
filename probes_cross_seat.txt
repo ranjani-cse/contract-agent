@@ -1,0 +1,14 @@
+OK    SalarySlip.list                This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    SalarySlip.get                 This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    Employee.list                  This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    Employee.get                   This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    Payroll.list                   This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    Payslip.list                   This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    WorkOrder.list                 This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    StockEntry.list                This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    Ticket.list                    This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    EsignDocument.list             This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    Mailbox.list                   This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+OK    FormSubmission.list            This tool is not available to your seat; it is not in your tools/list. Re-fetch tools/list for the tools you may call. (tool_not_available)
+LEAK  Lead.list                      
+LEAK  Deal.list                      

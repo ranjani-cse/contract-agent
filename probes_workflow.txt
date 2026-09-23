@@ -1,0 +1,24 @@
+targets:
+  pending_approval     b2c85526-f044-4c9d-ba7d-d98c1731f0cc  CTR-2026-00050
+  draft                01de985b-2bdf-41f5-841d-0e62ed1442f9  CTR-2026-00048
+  cancelled            7246fa9f-ee0a-465f-aee0-fda067416f61  CTR-2025-00024
+  expired              d67e79d7-6ea7-46c7-b079-b68e5733b7d4  CTR-2025-00005
+  active               b3dad4ac-b897-4dfa-804d-d18e121895f5  CTR-2026-00001
+  expiring_soon        ff04d11c-4759-417a-905b-3b873dd4d585  CTR-2024-00001
+
+OK     Contract.submit_for_approval        from pending_approval   -> No transition from 'pending_approval' to 'pending_approval' in flow 'ContractFlow': this tool takes the edge from 'draft' (action 'Submit for Approval'). From 'pending_approval' you can go to: active (Approve & Activate); cancelled (Cancel); draft (Send Back) (invalid_transition)
+OK     Contract.mark_expiring              from pending_approval   -> No transition from 'pending_approval' to 'expiring_soon' in flow 'ContractFlow': this tool takes the edge from 'active' (action 'Mark Expiring'). From 'pending_approval' you can go to: active (Approve & Activate); cancelled (Cancel); draft (Send Back) (invalid_transition)
+OK     Contract.mark_expired               from pending_approval   -> No transition from 'pending_approval' to 'expired' in flow 'ContractFlow': this tool takes the edge from 'expiring_soon' (action 'Mark Expired'). From 'pending_approval' you can go to: active (Approve & Activate); cancelled (Cancel); draft (Send Back) (invalid_transition)
+OK     Contract.mark_expiring              from draft              -> No transition from 'draft' to 'expiring_soon' in flow 'ContractFlow': this tool takes the edge from 'active' (action 'Mark Expiring'). From 'draft' you can go to: cancelled (Cancel); pending_approval (Submit for Approval) (invalid_transition)
+OK     Contract.mark_expired               from draft              -> No transition from 'draft' to 'expired' in flow 'ContractFlow': this tool takes the edge from 'expiring_soon' (action 'Mark Expired'). From 'draft' you can go to: cancelled (Cancel); pending_approval (Submit for Approval) (invalid_transition)
+OK     Contract.submit_for_approval        from cancelled          -> No transition from 'cancelled' to 'pending_approval' in flow 'ContractFlow': this tool takes the edge from 'draft' (action 'Submit for Approval'). From 'cancelled' you can go to: nowhere — it is terminal (invalid_transition)
+OK     Contract.mark_expiring              from cancelled          -> No transition from 'cancelled' to 'expiring_soon' in flow 'ContractFlow': this tool takes the edge from 'active' (action 'Mark Expiring'). From 'cancelled' you can go to: nowhere — it is terminal (invalid_transition)
+OK     Contract.mark_expired               from cancelled          -> No transition from 'cancelled' to 'expired' in flow 'ContractFlow': this tool takes the edge from 'expiring_soon' (action 'Mark Expired'). From 'cancelled' you can go to: nowhere — it is terminal (invalid_transition)
+OK     Contract.submit_for_approval        from expired            -> No transition from 'expired' to 'pending_approval' in flow 'ContractFlow': this tool takes the edge from 'draft' (action 'Submit for Approval'). From 'expired' you can go to: renewed (Renew) (invalid_transition)
+OK     Contract.mark_expiring              from expired            -> No transition from 'expired' to 'expiring_soon' in flow 'ContractFlow': this tool takes the edge from 'active' (action 'Mark Expiring'). From 'expired' you can go to: renewed (Renew) (invalid_transition)
+OK     Contract.mark_expired               from expired            -> No transition from 'expired' to 'expired' in flow 'ContractFlow': this tool takes the edge from 'expiring_soon' (action 'Mark Expired'). From 'expired' you can go to: renewed (Renew) (invalid_transition)
+OK     Contract.submit_for_approval        from active             -> No transition from 'active' to 'pending_approval' in flow 'ContractFlow': this tool takes the edge from 'draft' (action 'Submit for Approval'). From 'active' you can go to: expiring_soon (Mark Expiring); terminated (Terminate) (invalid_transition)
+OK     Contract.submit_for_approval        from expiring_soon      -> No transition from 'expiring_soon' to 'pending_approval' in flow 'ContractFlow': this tool takes the edge from 'draft' (action 'Submit for Approval'). From 'expiring_soon' you can go to: expired (Mark Expired); renewed (Renew); terminated (Terminate) (invalid_transition)
+OK     Contract.mark_expiring              from expiring_soon      -> No transition from 'expiring_soon' to 'expiring_soon' in flow 'ContractFlow': this tool takes the edge from 'active' (action 'Mark Expiring'). From 'expiring_soon' you can go to: expired (Mark Expired); renewed (Renew); terminated (Terminate) (invalid_transition)
+
+=== 0 accepted from invalid state ===
