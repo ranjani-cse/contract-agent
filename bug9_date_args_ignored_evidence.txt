@@ -1,0 +1,29 @@
+Bug 9 evidence: renewal_forecast silently ignores from_date and to_date
+
+Every call below returned 16 rows — identical to the no-args default window:
+
+  {'horizon_days': 60, 'from_date': '2026-12-01', 'to_date': '2026-01-01'}  -> 16 rows
+  {'horizon_days': 60, 'from_date': '2099-01-01', 'to_date': '2099-12-31'}  -> 16 rows
+  {'horizon_days': 60, 'to_date': '2000-01-01'}                             -> 16 rows
+  {'horizon_days': 60, 'from_date': 'not-a-date'}                           -> 16 rows
+  {'horizon_days': 60, 'from_date': '2026-13-45'}                           -> 16 rows
+
+Expected:
+- malformed / invalid dates -> invalid_arguments
+- past or inverted window -> 0 rows
+- different windows -> different result sets
+
+Observed: identical result every time. The date arguments are accepted by the schema but discarded by the server, with no error.
+
+Repro:
+  python3 -c "
+  from agent.mcp_client import call_tool
+  from agent.agent import _unwrap
+  for args in [
+      {'horizon_days': 60, 'from_date': 'not-a-date'},
+      {'horizon_days': 60, 'to_date': '2000-01-01'},
+      {'horizon_days': 60},
+  ]:
+      n = len(_unwrap(call_tool('endpoint.contracts.renewal_forecast', args)).get('contracts', []))
+      print(args, '->', n, 'rows')
+  "
