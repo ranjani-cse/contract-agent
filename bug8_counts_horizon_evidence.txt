@@ -1,0 +1,19 @@
+Bug 8 evidence: renewal_forecast counts.in_horizon varies with limit
+
+{horizon_days: 60, limit: 20}   -> rows=16, counts={'in_horizon': 16, ...}
+{horizon_days: 60, limit: 100}  -> rows=78, counts={'in_horizon': 78, ...}
+{horizon_days: 60}              -> rows=16, counts={'in_horizon': 16, ...}
+{limit: 100}                    -> rows=83, counts={'in_horizon': 83, ...}
+{}                              -> rows=16, counts={'in_horizon': 16, ...}
+
+The 60-day horizon is a property of the data. counts.in_horizon should be the same regardless of limit. Instead limit acts as a scan window: the tool scans the first `limit` contracts and reports how many fall in the horizon, presenting the result as a total.
+
+Schema description: "Board mode: contracts scanned per page (clamped to 1..scan limit, default 20)."
+
+Repro: python3 -c "
+from agent.mcp_client import call_tool
+from agent.agent import _unwrap
+for args in [{'horizon_days': 60, 'limit': 20}, {'horizon_days': 60, 'limit': 100}, {'horizon_days': 60}]:
+    data = _unwrap(call_tool('endpoint.contracts.renewal_forecast', args))
+    print(args, 'rows=', len(data.get('contracts', [])), 'in_horizon=', data.get('counts', {}).get('in_horizon'))
+"
