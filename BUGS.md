@@ -12,24 +12,17 @@ All bugs filed via the platform's "Report a problem" form, with evidence committ
 | 6 | 2026-09-22 | endpoint.contracts.propose_clause_deviation | Rejects every `clause_key` from clauses_used; no discoverable value | High | [bug7_clause_key_evidence.txt](bug7_clause_key_evidence.txt) |
 | 7 | 2026-09-23 | endpoint.contracts.renewal_forecast | `counts.in_horizon` varies with `limit`, contradicting horizon semantics | High | [bug8_counts_horizon_evidence.txt](bug8_counts_horizon_evidence.txt) |
 | 8 | 2026-09-23 | endpoint.contracts.renewal_forecast | Silently ignores `from_date`/`to_date`; accepts malformed and inverted ranges and returns the default window | High | [bug9_date_args_ignored_evidence.txt](bug9_date_args_ignored_evidence.txt) |
+| 9 | 2026-09-23 | tools.search + endpoint.people_directory | `tools.search` returns a tool absent from the seat's tools/list; calling it reports `invalid_arguments` instead of `tool_not_available` | Medium-High | [bug10_people_directory_evidence.txt](bug10_people_directory_evidence.txt) |
 
 ## Pattern
 
-`endpoint.contracts.*` tools document arguments and behavior in their descriptions but do not enforce or expose them consistently:
-- Numeric bounds documented but not declared in schema (bugs 1, 3, 4)
-- Failure envelope inconsistent with entity tools (bug 2)
-- Response payload envelope inconsistent (bug 5)
-- Field name referenced in schema not present in data (bug 6)
-- Counter semantics wrong (bug 7)
-- Date arguments accepted but ignored, with no validation (bug 8)
-
-Bug 6 blocks the A17 playbook-review task directly. Bug 8 affects the A17 date-window part.
+`endpoint.contracts.*` tools document behavior but do not enforce or expose it consistently. The `tools.*` discovery tools surface unavailable tools with misleading errors.
 
 ## Withdrawn / corrected
 
 - An earlier report on `renewal_forecast` rejecting `days` was filed with the wrong argument name and withdrawn.
-- The `counts.in_horizon` bug was filed twice (#8, #9) — #9 marked duplicate, #8 kept.
+- The `counts.in_horizon` bug was filed twice; the second copy was closed as duplicate.
 
 ## Total
 
-8 valid bugs filed. 1 withdrawn. 1 duplicate closed.
+9 valid bugs filed. 1 withdrawn. 1 duplicate closed.
