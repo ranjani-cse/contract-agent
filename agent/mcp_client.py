@@ -1,32 +1,52 @@
-"""MCP client for AgentSwitch Contracts seat (Team 17)."""
-import os, requests
+"""MCP client — talks to AgentSwitch over JSON-RPC.
 
-AS = os.environ.get("AS", "https://agentswitch.theschoolofai.in")
-TOKEN = os.environ.get("TOKEN")
+All tool calls go through ONE endpoint:  {AS_URL}/api/mcp
+Methods used: initialize, tools/list, tools/call.
+Auth: Authorization: Bearer <token> — anonymous is refused (401).
+"""
+import os
+import json
+import requests
+from dotenv import load_dotenv
 
-def _post(payload, timeout=30):
-    r = requests.post(
-        f"{AS}/api/mcp",
-        headers={"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"},
-        json=payload, timeout=timeout,
+# .env wins over any stale value in the shell environment
+load_dotenv(override=True)
+
+AS_URL = os.getenv("AS_URL", "https://agentswitch.theschoolofai.in")
+AS_TOKEN = os.getenv("AS_TOKEN")
+
+_request_id = 0
+
+def _next_id():
+    global _request_id
+    _request_id += 1
+    return _request_id
+
+def call_mcp(method, params=None):
+    """Send a JSON-RPC 2.0 request to the MCP endpoint."""
+    resp = requests.post(
+        f"{AS_URL}/api/mcp",
+        headers={
+            "Authorization": f"Bearer {AS_TOKEN}",
+            "Content-Type": "application/json",
+        },
+        json={"jsonrpc": "2.0", "id": _next_id(), "method": method, "params": params or {}},
+        timeout=30,
     )
-    return r
+    try:
+        body = resp.json()
+    except Exception:
+        body = {"_raw": resp.text, "_status": resp.status_code}
+    return {"http_status": resp.status_code, "body": body}
 
 def call(method, params=None, id=1):
-    r = _post({"jsonrpc": "2.0", "id": id, "method": method, "params": params or {}})
-    try:
-        body = r.json()
-    except Exception:
-        body = {"_raw": r.text, "_status": r.status_code}
-    return {"http_status": r.status_code, "body": body}
+    return call_mcp(method, params)
 
 def call_tool(name, arguments=None):
-    return call("tools/call", {"name": name, "arguments": arguments or {}})
+    return call_mcp("tools/call", {"name": name, "arguments": arguments or {}})
 
 def is_failure(response):
-    """True if the call failed, regardless of which envelope is used."""
     body = response.get("body", {})
-    # auth / generic error envelope: {"detail": "Authentication required"}
     if "detail" in body and "result" not in body:
         return True
     if "error" in body:
@@ -37,8 +57,9 @@ def is_failure(response):
     return bool(meta.get("status") and meta["status"] >= 400)
 
 def failure_reason(response):
-    """Extract a human-readable failure reason from either envelope."""
     body = response.get("body", {})
+    if "detail" in body and "result" not in body:
+        return f"auth: {body['detail']}"
     if "error" in body:
         err = body["error"]
         return f"{err.get('message')} ({err.get('data', {}).get('code')})"
@@ -48,4 +69,11 @@ def failure_reason(response):
     return None
 
 def list_tools():
-    return call("tools/list", {})["body"]["result"]["tools"]
+    return call_mcp("tools/list", {})["body"]["result"]["tools"]
+
+def initialize():
+    return call_mcp("initialize", {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {},
+        "clientInfo": {"name": "team-17", "version": "0.1"},
+    })
