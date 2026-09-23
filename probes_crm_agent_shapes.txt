@@ -1,0 +1,11 @@
+testing 9 tools
+
+Lead.list                                top_error=False isError=False payload=data
+Deal.list                                top_error=False isError=False payload=data
+AgentRunbook.list                        top_error=False isError=False payload=data
+AgentEscalation.list                     top_error=False isError=False payload=data
+AgentSkill.list                          top_error=False isError=False payload=data
+AgentTask.list                           top_error=False isError=False payload=data
+AgentMessage.list                        top_error=False isError=False payload=data
+AgentMemory.list                         top_error=False isError=False payload=data
+AccountPlan.list                         top_error=False isError=False payload=data
