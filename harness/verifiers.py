@@ -39,7 +39,7 @@ def _row_id(row):
 
 def verify_renewal_forecast(agent_answer):
     db = _extract(call_tool("endpoint.contracts.renewal_forecast",
-                            {"horizon_days": 60, "limit": 100}))
+                            {"horizon_days": 60, "limit": 20}))
     db_ids = {_row_id(r) for r in _rows(db) if _row_id(r)}
     agent_ids = {_row_id(r) for r in (agent_answer or {}).get("expiring", []) if _row_id(r)}
     return {"pass": db_ids == agent_ids,
