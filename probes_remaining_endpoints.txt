@@ -1,0 +1,30 @@
+=== endpoint.contracts.attest_obligation ===
+  {}                   REJECTED Invalid tool arguments. (invalid_arguments)
+  {'limit': 0}         REJECTED Invalid tool arguments. (invalid_arguments)
+  {'limit': -1}        REJECTED Invalid tool arguments. (invalid_arguments)
+  {'offset': -1}       REJECTED Invalid tool arguments. (invalid_arguments)
+
+=== endpoint.contracts.bind_deviation_approval ===
+  {}                   REJECTED Invalid tool arguments. (invalid_arguments)
+  {'limit': 0}         REJECTED Invalid tool arguments. (invalid_arguments)
+  {'limit': -1}        REJECTED Invalid tool arguments. (invalid_arguments)
+  {'offset': -1}       REJECTED Invalid tool arguments. (invalid_arguments)
+
+=== endpoint.contracts.capture_document_revision ===
+  {}                   REJECTED Invalid tool arguments. (invalid_arguments)
+  {'limit': 0}         REJECTED Invalid tool arguments. (invalid_arguments)
+  {'limit': -1}        REJECTED Invalid tool arguments. (invalid_arguments)
+  {'offset': -1}       REJECTED Invalid tool arguments. (invalid_arguments)
+
+=== endpoint.contracts.document_redline ===
+  {}                   REJECTED Invalid tool arguments. (invalid_arguments)
+  {'limit': 0}         REJECTED Invalid tool arguments. (invalid_arguments)
+  {'limit': -1}        REJECTED Invalid tool arguments. (invalid_arguments)
+  {'offset': -1}       REJECTED Invalid tool arguments. (invalid_arguments)
+
+=== endpoint.contracts.recheck_deviation_coverage ===
+  {}                   REJECTED Invalid tool arguments. (invalid_arguments)
+  {'limit': 0}         REJECTED Invalid tool arguments. (invalid_arguments)
+  {'limit': -1}        REJECTED Invalid tool arguments. (invalid_arguments)
+  {'offset': -1}       REJECTED Invalid tool arguments. (invalid_arguments)
+
