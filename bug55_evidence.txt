@@ -1,0 +1,28 @@
+Tool: endpoint.contracts.record_renewal_decision
+Arguments: {}
+
+Response:
+{
+  "http_status": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "Invalid tool arguments.",
+      "data": {
+        "code": "invalid_arguments",
+        "errors": [
+          {
+            "field": "/renewal_id",
+            "message": "renewal_id is required."
+          },
+          {
+            "field": "/decision",
+            "message": "decision is required."
+          }
+        ]
+      }
+    }
+  }
+}

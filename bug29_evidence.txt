@@ -1,0 +1,27 @@
+Tool: Contract.update
+Arguments: {
+  "id": "00000000-0000-0000-0000-000000000000",
+  "data": {}
+}
+
+Response:
+{
+  "http_status": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "Invalid tool arguments.",
+      "data": {
+        "code": "invalid_arguments",
+        "errors": [
+          {
+            "field": "/data",
+            "message": "data is not an accepted argument of this tool."
+          }
+        ]
+      }
+    }
+  }
+}

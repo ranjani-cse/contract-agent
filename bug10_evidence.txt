@@ -1,0 +1,30 @@
+Tool: ContractPreferences.create
+Arguments: {
+  "data": {
+    "default_contract_duration_months": 12,
+    "auto_renewal_enabled": false,
+    "renewal_reminder_days": 30
+  }
+}
+
+Response:
+{
+  "http_status": 200,
+  "body": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "Invalid tool arguments.",
+      "data": {
+        "code": "invalid_arguments",
+        "errors": [
+          {
+            "field": "/data",
+            "message": "data is not an accepted argument of this tool."
+          }
+        ]
+      }
+    }
+  }
+}
