@@ -1,0 +1,7 @@
+limit | in_horizon | rows | scan
+------|------------|------|-----
+   20 |         16 |   16 | {"basis": "the 20 contract(s) in this wi
+   40 |         31 |   31 | {"basis": "the 40 contract(s) in this wi
+   60 |         48 |   48 | {"basis": "the 60 contract(s) in this wi
+   80 |         63 |   63 | {"basis": "the 80 contract(s) in this wi
+  100 |         78 |   78 | {"basis": "the 100 contract(s) in this w

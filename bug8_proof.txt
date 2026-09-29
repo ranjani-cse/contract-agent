@@ -1,0 +1,6 @@
+{} -> 16 rows
+{'from_date': 'not-a-date'} -> 16 rows
+{'from_date': '2026-13-45'} -> 16 rows
+{'from_date': '2026-12-01', 'to_date': '2026-01-01'} -> 16 rows
+{'to_date': '2000-01-01'} -> 16 rows
+{'from_date': '2099-01-01', 'to_date': '2099-12-31'} -> 16 rows
