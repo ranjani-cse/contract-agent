@@ -29,28 +29,24 @@ def _list_documents_for(contract_id):
     return data.get("data", []) if isinstance(data, dict) else []
 
 def review_against_playbook(contract_id):
-    """Structural playbook comparison. propose_clause_deviation is unusable (Bug 6/7)."""
     docs = _list_documents_for(contract_id)
     if not docs:
-        return {"_no_document": True, "contract_id": contract_id,
-                "note": "contract has no ContractDocument; playbook review not applicable"}
+        return {"_no_document": True, "contract_id": contract_id}
     doc = docs[0]
-    clauses_used = doc.get("clauses_used", []) or []
-    doc_clause_ids = {c.get("clause_id") for c in clauses_used if isinstance(c, dict)}
-
-    r = call_tool("ContractClause.list", {"is_standard": True, "limit": 100})
-    lib = _unwrap(r)
-    lib_rows = lib.get("data", []) if isinstance(lib, dict) else []
-    lib_ids = {c.get("id") for c in lib_rows if isinstance(c, dict)}
-
-    modifications = [c for c in clauses_used if isinstance(c, dict) and c.get("is_modified")]
-    return {
+    clauses = doc.get("clauses_used", []) or []
+    if not clauses:
+        return {"_no_clauses": True, "document_id": doc.get("id")}
+    first = clauses[0]
+    clause_uuid = first.get("clause_id")
+    if not clause_uuid:
+        return {"_error": "clause has no clause_id"}
+    r = call_tool("endpoint.contracts.propose_clause_deviation", {
         "document_id": doc.get("id"),
-        "clauses_in_document": len(clauses_used),
-        "modified_clauses": len(modifications),
-        "missing_standard_clauses": list(lib_ids - doc_clause_ids)[:5],
-        "note": "propose_clause_deviation could not be used — clause_key not discoverable (bug filed).",
-    }
+        "clause_key": clause_uuid,
+        "rationale": "Automated playbook review: clause departs from standard position.",
+        "proposed_content": "Proposed revision per playbook review.",
+    })
+    return _unwrap(r)
 
 def missing_obligations(contract_id):
     return _unwrap(call_tool("endpoint.contracts.obligation_evidence_pack",
