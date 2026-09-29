@@ -29,9 +29,29 @@ All bugs filed via the platform's "Report a problem" form, with evidence committ
 
 ## Fixed by the platform
 
-- **Bug 1** (`renewal_forecast` accepts `horizon_days` below documented min 1) — **fixed 2026-09-29**.
+Confirmed fixed on 2026-09-29. Six of the nine filed bugs now behave correctly.
+
+- **Bug 1** — `renewal_forecast` accepts `horizon_days` below documented min 1.
   Server now returns `invalid_arguments: /horizon_days must be at least 1`.
-  Test `tests/test_horizon_days_bounds.py` updated to assert rejection.
+
+- **Bug 2** — `obligation_evidence_pack` reported failure via `result.isError`.
+  Now uses the JSON-RPC `error` field, consistent with entity tools.
+
+- **Bug 3** — `obligation_evidence_pack` accepted `limit` outside 1-200.
+  Now rejects out-of-range values with `invalid_arguments`.
+
+- **Bug 4** — `renewal_forecast` accepted negative `offset`.
+  Negative now rejected; the upper bound is still missing (partial fix).
+
+- **Bug 5** — `renewal_forecast` nested its payload under an extra `"result"` key.
+  Now returns `contracts` at the top level, matching entity tools.
+
+- **Bug 6** — `propose_clause_deviation` rejected every `clause_key` tried.
+  Correct value is the clause's UUID from `clauses_used`; `proposed_content`
+  is required (schema says optional). Workaround implemented in the agent.
+
+- **Bug 9** — `tools.search` returned `endpoint.people_directory` not in `tools/list`.
+  The seat was expanded from 239 to 247 tools; the tool is now callable.
 
 ## Updates
 
