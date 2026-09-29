@@ -41,3 +41,21 @@ All bugs filed via the platform's "Report a problem" form, with evidence committ
 - `proposed_content` is documented as optional with a default, but the server requires it (`proposed_content_required`, 422).
 
 Evidence: `bug6_UPDATE_evidence.txt`. The agent's `review_against_playbook` now uses the correct format.
+
+## Test data note
+
+The harness run on 2026-09-29 created deviations to prove the playbook write
+path works. Two were moved to `pending_approval` by `bind_deviation_approval`
+and cannot be withdrawn from this seat.
+
+The state machine's error message says:
+  "From 'pending_approval' you can go to: approved (Approve); draft (Send Back); rejected (Reject)"
+but no Approve, Send Back, or Reject tool exists in this seat's `tools/list`.
+The withdraw tool only accepts `draft`.
+
+**Observation:** the error message suggests actions a client cannot perform
+from this seat. A discoverability gap similar to Bug 6's clause_key.
+
+IDs in `pending_approval`:
+- 9fd4003f-fd0b-4900-b918-97621be92a38
+- a84262dc-2cc0-4269-92fd-893daf715f7c
