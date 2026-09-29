@@ -89,3 +89,13 @@ IDs in `pending_approval`:
 - **Bug 8** — `renewal_forecast` silently ignores `from_date` and `to_date`.
   `from_date=not-a-date` returns the same 16 rows as no date filter at all.
   The date arguments are documented in the schema but non-functional.
+
+
+### Updates sent 2026-09-29
+
+- **Bug 7** — sent the scan progression proving `counts.in_horizon` always
+  equals `rows`, and both scale with `limit`. The counter is a per-scan count,
+  not a horizon total. Evidence: `bug7_proof.txt`.
+- **Bug 8** — sent six cases proving `from_date`/`to_date` are silently
+  ignored: malformed, inverted, past, and future ranges all return the same
+  16 rows. Evidence: `bug8_proof.txt`.
