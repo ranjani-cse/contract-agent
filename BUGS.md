@@ -26,3 +26,9 @@ All bugs filed via the platform's "Report a problem" form, with evidence committ
 ## Total
 
 9 valid bugs filed. 1 withdrawn. 1 duplicate closed.
+
+## Fixed by the platform
+
+- **Bug 1** (`renewal_forecast` accepts `horizon_days` below documented min 1) — **fixed 2026-09-29**.
+  Server now returns `invalid_arguments: /horizon_days must be at least 1`.
+  Test `tests/test_horizon_days_bounds.py` updated to assert rejection.
