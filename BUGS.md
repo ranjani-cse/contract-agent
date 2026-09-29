@@ -32,3 +32,12 @@ All bugs filed via the platform's "Report a problem" form, with evidence committ
 - **Bug 1** (`renewal_forecast` accepts `horizon_days` below documented min 1) — **fixed 2026-09-29**.
   Server now returns `invalid_arguments: /horizon_days must be at least 1`.
   Test `tests/test_horizon_days_bounds.py` updated to assert rejection.
+
+## Updates
+
+**Bug 6 — updated 2026-09-29.** Investigation identified the correct value for `clause_key`: the clause's **UUID** from the document's `clauses_used` array. With the correct UUID and a `proposed_content` value, `propose_clause_deviation` succeeds. Two schema documentation defects:
+
+- `clause_key` is described as "Key of a clause present in the document's clauses_used" — but `clauses_used` has no `clause_key` field. The accepted value is `clause_id` (a UUID).
+- `proposed_content` is documented as optional with a default, but the server requires it (`proposed_content_required`, 422).
+
+Evidence: `bug6_UPDATE_evidence.txt`. The agent's `review_against_playbook` now uses the correct format.
