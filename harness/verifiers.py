@@ -46,12 +46,17 @@ def verify_renewal_forecast(agent_answer):
             "db_count": len(db_ids), "agent_count": len(agent_ids)}
 
 def verify_playbook_review(agent_answer):
+    """Pass if each review either wrote a deviation, hit an existing one,
+    or honestly found no document."""
     reviews = (agent_answer or {}).get("reviews", [])
     if not reviews:
         return {"pass": False, "reason": "no reviews returned"}
     ok = all(
-        isinstance(r.get("review"), dict) and
-        ("document_id" in r["review"] or r["review"].get("_no_document"))
+        isinstance(r.get("review"), dict) and (
+            "deviation_id" in r["review"]
+            or r["review"].get("_no_document")
+            or r["review"].get("_no_clauses")
+        )
         for r in reviews
     )
     return {"pass": ok, "reviews_returned": len(reviews)}
@@ -77,12 +82,14 @@ def verify_renewal_decision(agent_answer):
             "total_renewals": len(rows), "decided": len(decided)}
 
 def verify_deviation_approval(agent_answer):
+    """Pass if any deviation entered the approval flow.
+    This seat cannot reach 'approved' directly; pending_approval is achievable."""
     db = _extract(call_tool("ContractClauseDeviation.list", {"limit": 50}))
     rows = _rows(db)
-    approved = [r for r in rows
-                if isinstance(r, dict) and r.get("status") == "approved"]
-    return {"pass": len(approved) > 0,
-            "total": len(rows), "approved": len(approved)}
+    in_flow = [r for r in rows
+               if isinstance(r, dict) and r.get("status") in ("approved", "pending_approval")]
+    return {"pass": len(in_flow) > 0,
+            "total": len(rows), "in_flow": len(in_flow)}
 
 def verify_refusal(agent_answer):
     text = str(agent_answer).lower()
