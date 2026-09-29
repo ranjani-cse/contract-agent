@@ -34,13 +34,16 @@
 - Playbook comparison — structural (propose_clause_deviation unusable, Bug 6)
 - Obligation evidence pack — per-contract retrieval
 - Refusal tasks (t6, t7) — agent declines unavailable / unsupportable questions
-- Harness — 5/7 honest PASS, 2 tasks deferred
+- Harness — 7/7 PASS, all verifiers read the DB
 
 ## Known Issues
 
-- `propose_clause_deviation` rejects every `clause_key` from `clauses_used`
-  (Bug 6). Workaround: structural playbook comparison instead of writing a
-  deviation row.
+- `propose_clause_deviation` (Bug 6) — solved. `clause_key` expects the
+  clause UUID from `clauses_used`; `proposed_content` is required despite the
+  schema. Agent now writes real deviations.
+- State-machine error messages suggest transitions (Send Back, Approve,
+  Reject) whose tools aren't exposed in this seat. Test deviations left in
+  pending_approval as a result.
 - `renewal_forecast` `counts.in_horizon` varies with `limit` (Bug 7).
 - `renewal_forecast` `from_date`/`to_date` silently ignored (Bug 8).
 - `renewal_forecast` `offset` upper bound missing (partial fix).
