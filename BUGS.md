@@ -79,3 +79,13 @@ from this seat. A discoverability gap similar to Bug 6's clause_key.
 IDs in `pending_approval`:
 - 9fd4003f-fd0b-4900-b918-97621be92a38
 - a84262dc-2cc0-4269-92fd-893daf715f7c
+
+### Still open as of 2026-09-29
+
+- **Bug 7** — `renewal_forecast` `counts.in_horizon` varies with `limit`.
+  `limit=20` → `in_horizon=16`; `limit=100` → `in_horizon=78`.
+  The 60-day horizon is a property of the data, not the page size.
+
+- **Bug 8** — `renewal_forecast` silently ignores `from_date` and `to_date`.
+  `from_date=not-a-date` returns the same 16 rows as no date filter at all.
+  The date arguments are documented in the schema but non-functional.
