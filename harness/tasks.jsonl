@@ -1,3 +1,4 @@
+{"id": "t0_health_check", "prompt": "Verify the environment is healthy: the token works and tools/list returns tools.", "verifier": "verify_health_check"}
 {"id": "t1_renewal_forecast", "prompt": "List contracts expiring in the next 60 days.", "tool_hint": "endpoint.contracts.renewal_forecast", "verifier": "verify_renewal_forecast"}
 {"id": "t2_playbook_review", "prompt": "Review the current draft against our playbook and list clause deviations.", "tool_hint": "endpoint.contracts.propose_clause_deviation", "verifier": "verify_playbook_review"}
 {"id": "t3_missing_obligations", "prompt": "List obligations we are missing across active contracts.", "tool_hint": "endpoint.contracts.obligation_evidence_pack", "verifier": "verify_missing_obligations"}

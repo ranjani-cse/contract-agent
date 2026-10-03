@@ -1,0 +1,37 @@
+obligations: 100
+statuses: Counter({'overdue': 70, 'completed': 16, 'in_progress': 5, 'pending': 5, 'waived': 3, 'breached': 1})
+
+  in_progress          1855274a-3d4c-4386-b38c-a34ac00d73aa  Annual insurance renewal — plant and mac  type=compliance
+  overdue              2389b318-153e-44b1-bae3-7ac4029fb4b2  Follow-up — Balaji Springs & Sons  type=insurance
+  completed            3262126d-5712-4777-b699-27bbd8005ddc  Grade 8.8 fastener shortage on the angle  type=audit
+  pending              01996b71-90f9-4b8e-808b-5a1e91cb3539  Spring steel strip shortage on the hex k  type=audit
+  waived               cdb54c66-d21f-49b1-ba8b-0684765fcd2b  Solapur despatch, week 43  type=compliance
+  breached             18d4e469-ca95-4edd-a25b-863af90030cb  Cast iron billet shortage on the file se  type=compliance
+
+OK     ContractObligation.start                         from in_progress     -> No transition from 'in_progress' to 'in_progress' in flow 'ContractObligationFlo
+OK     ContractObligation.mark_overdue.pending.overdue  from in_progress     -> No transition from 'in_progress' to 'overdue' in flow 'ContractObligationFlow': 
+OK     ContractObligation.complete_late                 from in_progress     -> No transition from 'in_progress' to 'completed' in flow 'ContractObligationFlow'
+OK     ContractObligation.start                         from overdue         -> No transition from 'overdue' to 'in_progress' in flow 'ContractObligationFlow': 
+OK     ContractObligation.mark_complete                 from overdue         -> No transition from 'overdue' to 'completed' in flow 'ContractObligationFlow': th
+OK     ContractObligation.mark_overdue.in_progress.overdue from overdue         -> No transition from 'overdue' to 'overdue' in flow 'ContractObligationFlow': this
+OK     ContractObligation.mark_overdue.pending.overdue  from overdue         -> No transition from 'overdue' to 'overdue' in flow 'ContractObligationFlow': this
+OK     ContractObligation.start                         from completed       -> No transition from 'completed' to 'in_progress' in flow 'ContractObligationFlow'
+OK     ContractObligation.mark_complete                 from completed       -> No transition from 'completed' to 'completed' in flow 'ContractObligationFlow': 
+OK     ContractObligation.mark_overdue.in_progress.overdue from completed       -> No transition from 'completed' to 'overdue' in flow 'ContractObligationFlow': th
+OK     ContractObligation.mark_overdue.pending.overdue  from completed       -> No transition from 'completed' to 'overdue' in flow 'ContractObligationFlow': th
+OK     ContractObligation.complete_late                 from completed       -> No transition from 'completed' to 'completed' in flow 'ContractObligationFlow': 
+OK     ContractObligation.mark_complete                 from pending         -> No transition from 'pending' to 'completed' in flow 'ContractObligationFlow': th
+OK     ContractObligation.mark_overdue.in_progress.overdue from pending         -> No transition from 'pending' to 'overdue' in flow 'ContractObligationFlow': this
+OK     ContractObligation.complete_late                 from pending         -> No transition from 'pending' to 'completed' in flow 'ContractObligationFlow': th
+OK     ContractObligation.start                         from waived          -> No transition from 'waived' to 'in_progress' in flow 'ContractObligationFlow': t
+OK     ContractObligation.mark_complete                 from waived          -> No transition from 'waived' to 'completed' in flow 'ContractObligationFlow': thi
+OK     ContractObligation.mark_overdue.in_progress.overdue from waived          -> No transition from 'waived' to 'overdue' in flow 'ContractObligationFlow': this 
+OK     ContractObligation.mark_overdue.pending.overdue  from waived          -> No transition from 'waived' to 'overdue' in flow 'ContractObligationFlow': this 
+OK     ContractObligation.complete_late                 from waived          -> No transition from 'waived' to 'completed' in flow 'ContractObligationFlow': thi
+OK     ContractObligation.start                         from breached        -> No transition from 'breached' to 'in_progress' in flow 'ContractObligationFlow':
+OK     ContractObligation.mark_complete                 from breached        -> No transition from 'breached' to 'completed' in flow 'ContractObligationFlow': t
+OK     ContractObligation.mark_overdue.in_progress.overdue from breached        -> No transition from 'breached' to 'overdue' in flow 'ContractObligationFlow': thi
+OK     ContractObligation.mark_overdue.pending.overdue  from breached        -> No transition from 'breached' to 'overdue' in flow 'ContractObligationFlow': thi
+OK     ContractObligation.complete_late                 from breached        -> No transition from 'breached' to 'completed' in flow 'ContractObligationFlow': t
+
+=== 0 accepted from invalid state ===

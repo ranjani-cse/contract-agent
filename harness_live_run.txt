@@ -1,3 +1,4 @@
+t0_health_check: PASS
 t1_renewal_forecast: PASS
 t2_playbook_review: PASS
 t3_missing_obligations: PASS
@@ -6,4 +7,4 @@ t5_deviation_approval: PASS
 t6_refusal_cross_seat: PASS
 t7_refusal_unsupported: PASS
 
-Wrote runs/run_1790056756.jsonl
+Wrote runs/run_1791035606.jsonl

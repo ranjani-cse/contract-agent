@@ -1,0 +1,32 @@
+Bug 6 — update 2026-09-29: clause_key format identified and workaround found
+
+The propose_clause_deviation tool's clause_key argument expects the clause's
+UUID from the document's clauses_used array, not any human-readable key.
+
+Confirmed working call:
+  document_id       = "0826ccba-16cb-4a79-9e92-f2eb3336a57c"
+  clause_key        = "8d4bd634-c2a9-488e-b7bc-b9e836d58b6d"  (clause_id UUID)
+  rationale         = "Automated playbook review: ..."
+  proposed_content  = "The receiving party shall hold all Confidential..."
+  -> SUCCESS
+     deviation_id = ba70d73f-aecb-49c2-8208-fbc91a7c3054
+     clause_id    = 8d4bd634-c2a9-488e-b7bc-b9e836d58b6d
+     clause_key   = 8d4bd634-c2a9-488e-b7bc-b9e836d58b6d
+
+Confirmed failures (all rejected with clause_not_in_document):
+  "confidentiality"
+  "data_protection"
+  "dispute_resolution"
+  "Confidentiality — Tool Room"
+
+Two schema documentation defects:
+1. clause_key is described as "Key of a clause present in the document's
+   clauses_used" — but clauses_used contains no field named clause_key.
+   The value that works is clause_id, a UUID.
+2. proposed_content is documented as optional ("Default: the clause's
+   current content_override; must be non-empty after normalisation") but
+   the server requires it. Calling without it returns
+   proposed_content_required (422).
+
+Cleanup: the test deviation ba70d73f-... was withdrawn via
+ContractClauseDeviation.withdraw.draft.withdrawn.

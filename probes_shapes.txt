@@ -1,0 +1,11 @@
+Contract.list                       top_error=False isError=False detail=False payload=data
+Contract.get                        top_error=True isError=False detail=False payload=?
+ContractDocument.list               top_error=False isError=False detail=False payload=data
+ContractClause.list                 top_error=False isError=False detail=False payload=data
+ContractObligation.list             top_error=False isError=False detail=False payload=data
+ContractRenewal.list                top_error=False isError=False detail=False payload=data
+ContractPlaybook.list               top_error=False isError=False detail=False payload=data
+ContractClauseDeviation.list        top_error=False isError=False detail=False payload=data
+ContractAmendment.list              top_error=False isError=False detail=False payload=data
+ContractTemplate.list               top_error=False isError=False detail=False payload=data
+ContractPreferences.list            top_error=False isError=False detail=False payload=data

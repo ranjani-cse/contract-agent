@@ -1,0 +1,36 @@
+documents: 100
+statuses: Counter({'in_review': 64, 'draft': 22, 'archived': 7, 'sent_for_signature': 3, 'approved': 2, 'signed': 2})
+
+  in_review                 0826ccba-16cb-4a79-9e92-f2eb3336a57c  Pipe Wrench — tooling change
+  draft                     b4b7ad8f-c663-4e54-ac14-04ad6739a995  Pune despatch, week 18
+  archived                  971abaaa-fb7b-4e1e-8b92-940c0c8a35ac  Spring steel strip shortage on the lathe
+  sent_for_signature        25905902-c596-42d5-a94e-20db016d84d0  Nitrile O-ring shortage on the toolmaker
+  approved                  81e46b05-2e4c-4095-a6b7-c063502ccff8  Pipe Wrench — annual review
+  signed                    dcbebb18-8cd2-4d44-a54c-ee130a4b6996  Job Work Agreement — Shreeji Powder Coat
+
+OK     ContractDocument.submit_for_review         from in_review            -> No transition from 'in_review' to 'in_review' in flow 'ContractDocumentFlow': th
+OK     ContractDocument.mark_signed               from in_review            -> No transition from 'in_review' to 'signed' in flow 'ContractDocumentFlow': this 
+OK     ContractDocument.archive                   from in_review            -> No transition from 'in_review' to 'archived' in flow 'ContractDocumentFlow': thi
+OK     ContractDocument.archive_draft             from in_review            -> No transition from 'in_review' to 'archived' in flow 'ContractDocumentFlow': thi
+OK     ContractDocument.send_for_signature        from draft                -> No transition from 'draft' to 'sent_for_signature' in flow 'ContractDocumentFlow
+OK     ContractDocument.mark_signed               from draft                -> No transition from 'draft' to 'signed' in flow 'ContractDocumentFlow': this tool
+OK     ContractDocument.archive                   from draft                -> No transition from 'draft' to 'archived' in flow 'ContractDocumentFlow': this to
+OK     ContractDocument.submit_for_review         from archived             -> No transition from 'archived' to 'in_review' in flow 'ContractDocumentFlow': thi
+OK     ContractDocument.send_for_signature        from archived             -> No transition from 'archived' to 'sent_for_signature' in flow 'ContractDocumentF
+OK     ContractDocument.mark_signed               from archived             -> No transition from 'archived' to 'signed' in flow 'ContractDocumentFlow': this t
+OK     ContractDocument.archive                   from archived             -> No transition from 'archived' to 'archived' in flow 'ContractDocumentFlow': this
+OK     ContractDocument.archive_draft             from archived             -> No transition from 'archived' to 'archived' in flow 'ContractDocumentFlow': this
+OK     ContractDocument.submit_for_review         from sent_for_signature   -> No transition from 'sent_for_signature' to 'in_review' in flow 'ContractDocument
+OK     ContractDocument.send_for_signature        from sent_for_signature   -> No transition from 'sent_for_signature' to 'sent_for_signature' in flow 'Contrac
+OK     ContractDocument.archive                   from sent_for_signature   -> No transition from 'sent_for_signature' to 'archived' in flow 'ContractDocumentF
+OK     ContractDocument.archive_draft             from sent_for_signature   -> No transition from 'sent_for_signature' to 'archived' in flow 'ContractDocumentF
+OK     ContractDocument.submit_for_review         from approved             -> No transition from 'approved' to 'in_review' in flow 'ContractDocumentFlow': thi
+OK     ContractDocument.mark_signed               from approved             -> No transition from 'approved' to 'signed' in flow 'ContractDocumentFlow': this t
+OK     ContractDocument.archive                   from approved             -> No transition from 'approved' to 'archived' in flow 'ContractDocumentFlow': this
+OK     ContractDocument.archive_draft             from approved             -> No transition from 'approved' to 'archived' in flow 'ContractDocumentFlow': this
+OK     ContractDocument.submit_for_review         from signed               -> No transition from 'signed' to 'in_review' in flow 'ContractDocumentFlow': this 
+OK     ContractDocument.send_for_signature        from signed               -> No transition from 'signed' to 'sent_for_signature' in flow 'ContractDocumentFlo
+OK     ContractDocument.mark_signed               from signed               -> No transition from 'signed' to 'signed' in flow 'ContractDocumentFlow': this too
+OK     ContractDocument.archive_draft             from signed               -> No transition from 'signed' to 'archived' in flow 'ContractDocumentFlow': this t
+
+=== 0 accepted from invalid state ===

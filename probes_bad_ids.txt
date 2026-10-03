@@ -1,0 +1,7 @@
+'not-a-uuid'                                  REJECTED Contract not found. (not_found)
+''                                            REJECTED Invalid tool arguments. (invalid_arguments)
+'00000000-0000-0000-0000-000000000000'        REJECTED Contract not found. (not_found)
+'00000000-0000-0000-0000-00000000000'         REJECTED Contract not found. (not_found)
+"' OR 1=1 --"                                 REJECTED Contract not found. (not_found)
+'../../../etc/passwd'                         REJECTED Contract not found. (not_found)
+'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'    REJECTED Contract not found. (not_found)

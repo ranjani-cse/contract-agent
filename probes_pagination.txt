@@ -1,0 +1,9 @@
+{'limit': 0}                             OK rows=0
+{'limit': -1}                            REJECTED Invalid tool arguments. (invalid_arguments)
+{'limit': 1}                             OK rows=1
+{'limit': 1000}                          OK rows=100
+{'limit': 1001}                          REJECTED Invalid tool arguments. (invalid_arguments)
+{'offset': -1}                           REJECTED Invalid tool arguments. (invalid_arguments)
+{'offset': 0}                            OK rows=20
+{'offset': 999999}                       OK rows=0
+{'limit': 10, 'offset': 999999}          OK rows=0
