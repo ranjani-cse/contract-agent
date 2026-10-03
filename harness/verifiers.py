@@ -117,3 +117,19 @@ def verify_health_check(agent_answer):
         return {"pass": False, "reason": f"auth or platform issue: {str(r.get('body'))[:120]}"}
     tools = call("tools/list", {})["body"].get("result", {}).get("tools", [])
     return {"pass": len(tools) > 0, "tool_count": len(tools)}
+
+
+def verify_pagination(agent_answer):
+    """Contract.list with limit=100 must return at most 100 rows and a valid shape."""
+    r = call_tool("Contract.list", {"limit": 100})
+    if is_failure(r):
+        return {"pass": False, "reason": f"Contract.list failed: {str(r.get('body'))[:120]}"}
+    data = _extract(r)
+    if not isinstance(data, dict):
+        return {"pass": False, "reason": "response is not a dict"}
+    rows = data.get("data", [])
+    if len(rows) > 100:
+        return {"pass": False, "reason": f"returned {len(rows)} rows, expected <= 100"}
+    if "total" not in data:
+        return {"pass": False, "reason": "response missing 'total' field"}
+    return {"pass": True, "rows_returned": len(rows), "total": data.get("total")}
