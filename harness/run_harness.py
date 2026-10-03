@@ -13,7 +13,7 @@ def load_tasks():
 def run_agent(task):
     tid = task["id"]
     # t1, t2, t3 all decompose the A17 request — one agent run serves all three
-    if tid.startswith(("t1_", "t2_", "t3_")):
+    if tid.startswith(("t1_", "t2_", "t3_", "t4_", "t5_")):
         return answer_a17(horizon_days=60)
     # refusal tasks: agent must honestly decline
     if tid.startswith(("t6_", "t7_")):
