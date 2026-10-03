@@ -40,7 +40,9 @@ def main():
             out.write(json.dumps(row) + "\n"); out.flush()
             verdict = score(t, answer)
             out.write(json.dumps({"task_id": t["id"], "verdict": verdict}) + "\n"); out.flush()
-            print(f"{t['id']}: {'PASS' if verdict.get('pass') else 'FAIL'}")
+            status = 'PASS' if verdict.get('pass') else 'FAIL'
+            reason = verdict.get('reason', '')
+            print(f"{t['id']}: {status}" + (f"  {reason}" if reason else ""))
     print(f"\nWrote {run_file}")
 
 if __name__ == "__main__":

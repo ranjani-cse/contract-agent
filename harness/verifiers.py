@@ -106,3 +106,14 @@ def verify_refusal_or_empty(agent_answer):
         "unable to find", "not available", "not found", "refused",
     ])
     return {"pass": honest, "agent_said": text[:200]}
+
+
+def verify_health_check(agent_answer):
+    """Environment check — token works and tools/list returns tools."""
+    from agent.mcp_client import call
+
+    r = call_tool("Contract.list", {"limit": 1})
+    if is_failure(r):
+        return {"pass": False, "reason": f"auth or platform issue: {str(r.get('body'))[:120]}"}
+    tools = call("tools/list", {})["body"].get("result", {}).get("tools", [])
+    return {"pass": len(tools) > 0, "tool_count": len(tools)}
