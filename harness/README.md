@@ -1,6 +1,6 @@
 # Harness — Contracts Agent (Team 17)
 
-A 7-task evaluation of the A17 agent against live AgentSwitch data.
+An 11-task evaluation of the A17 agent against live AgentSwitch data.
 
 ## How to run
 
@@ -14,7 +14,7 @@ A 7-task evaluation of the A17 agent against live AgentSwitch data.
 | File | Purpose |
 |---|---|
 | `run_harness.py` | Loop: load tasks, run agent, verify, log |
-| `tasks.jsonl` | 7 tasks including 2 refusal tasks |
+| `tasks.jsonl` | 11 tasks including 2 refusal tasks |
 | `verifiers.py` | DB-reading verifiers, one per task |
 
 ## Tasks
@@ -28,6 +28,9 @@ A 7-task evaluation of the A17 agent against live AgentSwitch data.
 | t5_deviation_approval | A deviation entered the approval flow |
 | t6_refusal_cross_seat | Agent declines another seat's data |
 | t7_refusal_unsupported | Agent declines unsupported questions |
+| t8_pagination | `Contract.list` with limit=100 returns bounded rows |
+| t9_workflow_guard | Invalid state transitions are rejected |
+| t10_tools_list_scoping | No foreign tools exposed |
 
 ## Design
 
@@ -37,4 +40,4 @@ A 7-task evaluation of the A17 agent against live AgentSwitch data.
 
 ## Current status
 
-7/7 PASS. Latest run: `../harness_live_run.txt`
+11/11 PASS. Latest run: `../harness_live_run.txt`
