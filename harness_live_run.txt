@@ -7,5 +7,7 @@ t5_deviation_approval: PASS
 t6_refusal_cross_seat: PASS
 t7_refusal_unsupported: PASS
 t8_pagination: PASS
+t9_workflow_guard: PASS
+t10_tools_list_scoping: PASS
 
-Wrote runs/run_1791036439.jsonl
+Wrote runs/run_1791177594.jsonl

@@ -133,3 +133,35 @@ def verify_pagination(agent_answer):
     if "total" not in data:
         return {"pass": False, "reason": "response missing 'total' field"}
     return {"pass": True, "rows_returned": len(rows), "total": data.get("total")}
+
+
+def verify_workflow_guard(agent_answer):
+    """The state machine must reject invalid transitions."""
+    r = call_tool("Contract.list", {"limit": 200})
+    if is_failure(r):
+        return {"pass": False, "reason": f"Contract.list failed: {str(r.get('body'))[:120]}"}
+    data = _extract(r)
+    rows = _rows(data)
+    cancelled = next((c for c in rows if isinstance(c, dict) and c.get("status") == "cancelled"), None)
+    if not cancelled:
+        return {"pass": True, "skipped": "no cancelled contract to test"}
+    cid = cancelled.get("id")
+    rr = call_tool("Contract.mark_expired", {"id": cid})
+    if is_failure(rr):
+        reason = str(rr.get("body", {}).get("error", {}).get("message", ""))[:80]
+        return {"pass": True, "rejection": reason}
+    return {"pass": False, "reason": "mark_expired was accepted on a cancelled contract"}
+
+
+def verify_tools_list_scoping(agent_answer):
+    """tools/list must not expose foreign tools."""
+    from agent.mcp_client import call
+
+    r = call("tools/list", {})
+    if "result" not in r.get("body", {}):
+        return {"pass": False, "reason": "tools/list failed"}
+    tools = [t["name"] for t in r["body"]["result"]["tools"]]
+    foreign = [n for n in tools if any(k in n for k in
+               ["SalarySlip", "Employee", "Payroll", "Payslip", "Ticket",
+                "WorkOrder", "StockEntry", "EsignDocument", "Mailbox"])]
+    return {"pass": len(foreign) == 0, "count": len(tools), "foreign": foreign}
