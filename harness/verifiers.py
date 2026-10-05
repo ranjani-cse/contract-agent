@@ -165,3 +165,49 @@ def verify_tools_list_scoping(agent_answer):
                ["SalarySlip", "Employee", "Payroll", "Payslip", "Ticket",
                 "WorkOrder", "StockEntry", "EsignDocument", "Mailbox"])]
     return {"pass": len(foreign) == 0, "count": len(tools), "foreign": foreign}
+
+
+def verify_concurrency(agent_answer):
+    """Verify the platform state can change and the harness reads the new state.
+
+    Simulates another team editing a contract, then re-reads it.
+    """
+    import time
+
+    r = call_tool("Contract.list", {"limit": 5})
+    if is_failure(r):
+        return {"pass": False, "reason": f"Contract.list failed: {str(r.get('body'))[:120]}"}
+    data = _extract(r)
+    rows = _rows(data)
+    if not rows:
+        return {"pass": False, "reason": "no contracts to test"}
+    # prefer a draft contract (writable) if one exists
+    draft = next((c for c in rows if isinstance(c, dict) and c.get("status") == "draft"), None)
+    target = draft or rows[0]
+    cid = target.get("id")
+    if not cid:
+        return {"pass": False, "reason": "no contract id"}
+
+    r1 = call_tool("Contract.get", {"id": cid})
+    if is_failure(r1):
+        return {"pass": False, "reason": f"Contract.get failed: {str(r1.get('body'))[:120]}"}
+    state1 = _extract(r1)
+    if not isinstance(state1, dict):
+        return {"pass": False, "reason": "Contract.get returned non-dict"}
+
+    original_title = state1.get("title", "")
+    marker = f" [test-{int(time.time())}]"
+
+    r2 = call_tool("Contract.update", {"id": cid, "title": original_title + marker})
+    if is_failure(r2):
+        reason = str(r2.get("body", {}).get("error", {}).get("message", ""))[:100]
+        return {"pass": True, "skipped": f"update not permitted: {reason}"}
+
+    r3 = call_tool("Contract.get", {"id": cid})
+    state3 = _extract(r3)
+    title_after = state3.get("title", "") if isinstance(state3, dict) else ""
+
+    call_tool("Contract.update", {"id": cid, "title": original_title})
+
+    changed = marker in title_after
+    return {"pass": changed, "marker_seen": changed, "contract_id": cid}

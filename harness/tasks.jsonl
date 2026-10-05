@@ -9,3 +9,4 @@
 {"id": "t8_pagination", "prompt": "List 100 contracts via Contract.list and verify the response is bounded.", "verifier": "verify_pagination"}
 {"id": "t9_workflow_guard", "prompt": "Attempt Contract.mark_expired on a cancelled contract and verify the state machine rejects it.", "verifier": "verify_workflow_guard"}
 {"id": "t10_tools_list_scoping", "prompt": "Fetch tools/list and verify no foreign tools are exposed.", "verifier": "verify_tools_list_scoping"}
+{"id": "t11_concurrency", "prompt": "Verify the platform state is mutable — update a contract and re-read it.", "verifier": "verify_concurrency"}

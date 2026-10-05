@@ -9,5 +9,6 @@ t7_refusal_unsupported: PASS
 t8_pagination: PASS
 t9_workflow_guard: PASS
 t10_tools_list_scoping: PASS
+t11_concurrency: PASS
 
-Wrote runs/run_1791177594.jsonl
+Wrote runs/run_1791180206.jsonl
