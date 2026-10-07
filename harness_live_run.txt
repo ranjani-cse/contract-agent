@@ -10,5 +10,7 @@ t8_pagination: PASS
 t9_workflow_guard: PASS
 t10_tools_list_scoping: PASS
 t11_concurrency: PASS
+t12_malformed_id: PASS
+t13_offset_past_end: PASS
 
-Wrote runs/run_1791180206.jsonl
+Wrote runs/run_1791374507.jsonl

@@ -211,3 +211,24 @@ def verify_concurrency(agent_answer):
 
     changed = marker in title_after
     return {"pass": changed, "marker_seen": changed, "contract_id": cid}
+
+
+def verify_malformed_id(agent_answer):
+    """Contract.get with a malformed UUID must fail cleanly."""
+    from agent.mcp_client import failure_reason
+
+    r = call_tool("Contract.get", {"id": "not-a-valid-uuid"})
+    if not is_failure(r):
+        return {"pass": False, "reason": "malformed UUID was accepted"}
+    reason = str(failure_reason(r)).lower()
+    return {"pass": True, "rejection": reason[:80]}
+
+
+def verify_offset_past_end(agent_answer):
+    """Contract.list with a huge offset returns zero rows without error."""
+    r = call_tool("Contract.list", {"offset": 999999})
+    if is_failure(r):
+        return {"pass": True, "rejection": str(failure_reason(r))[:80]}
+    data = _extract(r)
+    rows = data.get("data", []) if isinstance(data, dict) else []
+    return {"pass": len(rows) == 0, "rows_returned": len(rows)}
