@@ -14,7 +14,7 @@
   before scoring.
 - **Probes** (`probes/`) — 11 bug-hunting classes tested against the live
   platform.
-- **Tests** (`tests/`) — 12 hand-written tests across 6 files.
+- **Tests** (`tests/`) — 23 hand-written tests across 6 files.
 
 ## Architecture
 
@@ -58,7 +58,7 @@ reproducible evidence in this repo. Four were fixed by the platform between
 
 ## Tests Written
 
-12 hand-written tests in `tests/`:
+23 hand-written tests in `tests/`:
 
 | File | Tests | Bug |
 |---|---|---|

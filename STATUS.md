@@ -10,7 +10,7 @@ One-page answer to "where are we now."
 | Agent | agent/agent.py | Done — 5 operations answering A17 |
 | Agent loop | agent/agent_loop.py | Done |
 | Harness | harness/ | Done — 16 tasks, all passing |
-| Tests | tests/ | 18 tests covering all filed bugs |
+| Tests | tests/ | 23 tests covering all filed bugs + behavior |
 | Probes | probes/ | 11 classes tested |
 | Documentation | repo root | 8 files |
 
@@ -20,7 +20,7 @@ One-page answer to "where are we now."
 - Writes are real: clause deviations, renewal decisions, approvals.
 - Harness 16/16 PASS. Verifiers re-query the database, never trust the agent.
 - Refusal tasks pass (t6, t7).
-- 18 hand-written tests pass.
+- 23 hand-written tests pass.
 
 ## Bugs filed
 
