@@ -168,3 +168,54 @@ def answer_c5_renewal_package():
         "recommendation": rec,
         "rationale": rationale,
     }
+
+
+
+
+def answer_c1_disputed_quarter(party_id=None):
+    """Find a party's contracts and summarise what's on them.
+
+    Note: full disputed-lines reconciliation needs Bill/Invoice access
+    (outside the Contracts seat). This answers what the seat can see
+    and flags the limitation honestly.
+    """
+    all_contracts = _unwrap(call_tool("Contract.list", {"limit": 200}))
+    rows = all_contracts.get("data", []) if isinstance(all_contracts, dict) else []
+    if not rows:
+        return {"error": "no contracts"}
+
+    if not party_id:
+        from collections import Counter
+        counts = Counter(c.get("party_id") for c in rows if c.get("party_id"))
+        if not counts:
+            return {"error": "no party_id on contracts"}
+        party_id, n = counts.most_common(1)[0]
+
+    contract_rows = [c for c in rows if c.get("party_id") == party_id]
+
+    summary = []
+    for c in contract_rows[:10]:
+        cid = c.get("id")
+        obl = _unwrap(call_tool("ContractObligation.list",
+                                {"contract_id": cid, "limit": 20}))
+        ob_rows = obl.get("data", []) if isinstance(obl, dict) else []
+        dev = _unwrap(call_tool("ContractClauseDeviation.list",
+                                {"contract_id": cid, "limit": 10}))
+        dev_rows = dev.get("data", []) if isinstance(dev, dict) else []
+        summary.append({
+            "contract_id": cid,
+            "number": c.get("number"),
+            "status": c.get("status"),
+            "obligations": len(ob_rows),
+            "overdue_obligations": len([o for o in ob_rows if o.get("status") == "overdue"]),
+            "deviations": len(dev_rows),
+        })
+
+    return {
+        "party_id": party_id,
+        "contracts_found": len(contract_rows),
+        "summary": summary,
+        "note": ("Disputed-lines reconciliation needs Bill/Invoice access, "
+                 "which is outside the Contracts seat. What's shown is what "
+                 "this seat can verify."),
+    }
