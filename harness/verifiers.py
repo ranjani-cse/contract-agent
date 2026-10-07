@@ -267,3 +267,35 @@ def verify_obligation_workflow_guard(agent_answer):
         reason = str(rr.get("body", {}).get("error", {}).get("message", ""))[:80]
         return {"pass": True, "rejection": reason}
     return {"pass": False, "reason": "mark_complete was accepted on a pending obligation"}
+
+
+def verify_contract_get_missing(agent_answer):
+    """Contract.get with a valid-format but nonexistent UUID returns not_found."""
+    from agent.mcp_client import failure_reason
+
+    r = call_tool("Contract.get", {"id": "00000000-0000-0000-0000-000000000000"})
+    if not is_failure(r):
+        return {"pass": False, "reason": "nonexistent UUID was accepted"}
+    reason = str(failure_reason(r)).lower()
+    return {"pass": True, "rejection": reason[:80]}
+
+
+def verify_tools_describe_available(agent_answer):
+    """tools.describe on an available tool returns its schema."""
+    from agent.mcp_client import call
+
+    r = call("tools/call", {
+        "name": "tools.describe",
+        "arguments": {"names": ["Contract.list"]},
+    })
+    body = r.get("body", {})
+    if "result" not in body:
+        return {"pass": False, "reason": f"tools.describe failed: {str(body)[:120]}"}
+    text = body["result"]["content"][0]["text"]
+    import json as _json
+    parsed = _json.loads(text)
+    results = parsed.get("results", [])
+    if not results:
+        return {"pass": False, "reason": "no schema returned for Contract.list"}
+    schema = results[0].get("inputSchema", {})
+    return {"pass": bool(schema), "has_schema": bool(schema)}

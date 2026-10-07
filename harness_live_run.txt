@@ -14,5 +14,7 @@ t12_malformed_id: PASS
 t13_offset_past_end: PASS
 t14_tools_describe_foreign: PASS
 t15_obligation_workflow_guard: PASS
+t16_contract_get_missing: PASS
+t17_tools_describe_available: PASS
 
-Wrote runs/run_1791374936.jsonl
+Wrote runs/run_1791375930.jsonl

@@ -14,3 +14,5 @@
 {"id": "t13_offset_past_end", "prompt": "Call Contract.list with offset=999999 and verify it returns zero rows cleanly.", "verifier": "verify_offset_past_end"}
 {"id": "t14_tools_describe_foreign", "prompt": "Call tools.describe on a foreign tool and verify it reports not_available.", "verifier": "verify_tools_describe_foreign"}
 {"id": "t15_obligation_workflow_guard", "prompt": "Attempt an invalid transition on a pending obligation and verify it is rejected.", "verifier": "verify_obligation_workflow_guard"}
+{"id": "t16_contract_get_missing", "prompt": "Call Contract.get with a valid-format but nonexistent UUID and verify it returns not_found.", "verifier": "verify_contract_get_missing"}
+{"id": "t17_tools_describe_available", "prompt": "Call tools.describe on an available tool and verify a schema is returned.", "verifier": "verify_tools_describe_available"}
