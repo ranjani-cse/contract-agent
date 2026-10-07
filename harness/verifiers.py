@@ -232,3 +232,38 @@ def verify_offset_past_end(agent_answer):
     data = _extract(r)
     rows = data.get("data", []) if isinstance(data, dict) else []
     return {"pass": len(rows) == 0, "rows_returned": len(rows)}
+
+
+def verify_tools_describe_foreign(agent_answer):
+    """tools.describe on a foreign tool reports it in not_available."""
+    from agent.mcp_client import call
+
+    r = call("tools/call", {"name": "tools.describe",
+                            "arguments": {"names": ["SalarySlip.list"]}})
+    body = r.get("body", {})
+    if "result" not in body:
+        return {"pass": False, "reason": f"tools.describe failed: {str(body)[:120]}"}
+    text = body["result"]["content"][0]["text"]
+    import json as _json
+    parsed = _json.loads(text)
+    not_avail = parsed.get("not_available", [])
+    return {"pass": "SalarySlip.list" in not_avail, "not_available": not_avail}
+
+
+def verify_obligation_workflow_guard(agent_answer):
+    """The obligation state machine must reject invalid transitions."""
+    r = call_tool("ContractObligation.list", {"limit": 200})
+    if is_failure(r):
+        return {"pass": False, "reason": f"ContractObligation.list failed: {str(r.get('body'))[:120]}"}
+    data = _extract(r)
+    rows = _rows(data)
+    # find a pending obligation and try an invalid transition
+    pending = next((o for o in rows if isinstance(o, dict) and o.get("status") == "pending"), None)
+    if not pending:
+        return {"pass": True, "skipped": "no pending obligation to test"}
+    oid = pending.get("id")
+    rr = call_tool("ContractObligation.mark_complete", {"id": oid})
+    if is_failure(rr):
+        reason = str(rr.get("body", {}).get("error", {}).get("message", ""))[:80]
+        return {"pass": True, "rejection": reason}
+    return {"pass": False, "reason": "mark_complete was accepted on a pending obligation"}

@@ -12,5 +12,7 @@ t10_tools_list_scoping: PASS
 t11_concurrency: PASS
 t12_malformed_id: PASS
 t13_offset_past_end: PASS
+t14_tools_describe_foreign: PASS
+t15_obligation_workflow_guard: PASS
 
-Wrote runs/run_1791374507.jsonl
+Wrote runs/run_1791374936.jsonl

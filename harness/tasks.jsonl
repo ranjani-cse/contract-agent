@@ -12,3 +12,5 @@
 {"id": "t11_concurrency", "prompt": "Verify the platform state is mutable — update a contract and re-read it.", "verifier": "verify_concurrency"}
 {"id": "t12_malformed_id", "prompt": "Call Contract.get with a malformed UUID and verify the response is bounded.", "verifier": "verify_malformed_id"}
 {"id": "t13_offset_past_end", "prompt": "Call Contract.list with offset=999999 and verify it returns zero rows cleanly.", "verifier": "verify_offset_past_end"}
+{"id": "t14_tools_describe_foreign", "prompt": "Call tools.describe on a foreign tool and verify it reports not_available.", "verifier": "verify_tools_describe_foreign"}
+{"id": "t15_obligation_workflow_guard", "prompt": "Attempt an invalid transition on a pending obligation and verify it is rejected.", "verifier": "verify_obligation_workflow_guard"}
