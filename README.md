@@ -32,3 +32,15 @@ An agent for the Contracts seat that reviews contracts against a playbook, flags
     BUGS.md         Bug index with fix status
     WEEK2.md        Week 2 write-up
     FINDINGS.md     One-page summary of the investigation
+
+## Documentation
+
+| File | What it covers |
+|---|---|
+| `README.md` | This file — overview |
+| `WEEK2.md` | Week 2 write-up |
+| `DESIGN.md` | Agent and harness architecture |
+| `FINDINGS.md` | The pattern across all 9 bugs |
+| `BUGS.md` | Bug index with fix status |
+| `DEFERRED.md` | What's not built and why |
+| `harness/README.md` | Harness tasks and design |
