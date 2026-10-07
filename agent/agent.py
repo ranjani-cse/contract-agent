@@ -123,3 +123,48 @@ def answer_a17(horizon_days=60, top_n=3):
 def answer_t7_refusal():
     return {"answer": "cannot determine — the liability cap for this contract is not in the data I can query",
             "refused": True}
+
+
+def answer_c5_renewal_package():
+    """Build a renewal decision package for the soonest-expiring contract."""
+    expiring = expiring_soon(horizon_days=120, limit=100)
+    if not expiring:
+        return {"error": "no expiring contracts"}
+
+    def end_date(c):
+        t = c.get("term") or {}
+        return t.get("end_date") or "9999-12-31"
+
+    expiring_sorted = sorted(expiring, key=end_date)
+    target = expiring_sorted[0]
+    cid = target.get("id") or target.get("contract", {}).get("id")
+
+    contract = _unwrap(call_tool("Contract.get", {"id": cid}))
+
+    ob = _unwrap(call_tool("ContractObligation.list", {"contract_id": cid, "limit": 100}))
+    rows = ob.get("data", []) if isinstance(ob, dict) else []
+    met = [o for o in rows if o.get("status") == "completed"]
+    missed = [o for o in rows if o.get("status") in ("overdue", "pending", "in_progress")]
+
+    dev = _unwrap(call_tool("ContractClauseDeviation.list", {"contract_id": cid, "limit": 20}))
+    dev_rows = dev.get("data", []) if isinstance(dev, dict) else []
+
+    if not missed and not dev_rows:
+        rec = "renew"
+        rationale = "All obligations met, no open deviations."
+    elif len(missed) > 3:
+        rec = "renegotiate"
+        rationale = f"{len(missed)} missed or in-progress obligations."
+    else:
+        rec = "review"
+        rationale = f"{len(missed)} obligations open, {len(dev_rows)} deviations."
+
+    return {
+        "contract_id": cid,
+        "contract": contract,
+        "obligations_met": len(met),
+        "obligations_missed": len(missed),
+        "open_deviations": len(dev_rows),
+        "recommendation": rec,
+        "rationale": rationale,
+    }
