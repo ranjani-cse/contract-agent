@@ -6,7 +6,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"tool_count\": 264}",
-      "elapsed_s": 3.0
+      "elapsed_s": 2.91
     },
     {
       "id": "t1_renewal_forecast",
@@ -14,7 +14,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"db_count\": 20, \"agent_count\": 20}",
-      "elapsed_s": 28.16
+      "elapsed_s": 28.3
     },
     {
       "id": "t2_playbook_review",
@@ -22,7 +22,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"reviews_returned\": 3}",
-      "elapsed_s": 26.19
+      "elapsed_s": 0.0
     },
     {
       "id": "t3_missing_obligations",
@@ -30,7 +30,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"entries\": 3}",
-      "elapsed_s": 26.07
+      "elapsed_s": 0.0
     },
     {
       "id": "t4_renewal_decision",
@@ -38,7 +38,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"total_renewals\": 50, \"decided\": 4}",
-      "elapsed_s": 27.92
+      "elapsed_s": 1.94
     },
     {
       "id": "t5_deviation_approval",
@@ -46,7 +46,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"total\": 6, \"in_flow\": 3}",
-      "elapsed_s": 27.39
+      "elapsed_s": 1.26
     },
     {
       "id": "t6_refusal_cross_seat",
@@ -70,7 +70,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"rows_returned\": 100, \"total\": 100}",
-      "elapsed_s": 2.13
+      "elapsed_s": 2.05
     },
     {
       "id": "t9_workflow_guard",
@@ -78,7 +78,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"rejection\": \"No transition from 'cancelled' to 'expired' in flow 'ContractFlow': this tool ta\"}",
-      "elapsed_s": 3.03
+      "elapsed_s": 3.05
     },
     {
       "id": "t10_tools_list_scoping",
@@ -86,7 +86,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"count\": 264, \"foreign\": []}",
-      "elapsed_s": 1.63
+      "elapsed_s": 1.72
     },
     {
       "id": "t11_concurrency",
@@ -94,7 +94,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"marker_seen\": true, \"contract_id\": \"01de985b-2bdf-41f5-841d-0e62ed1442f9\"}",
-      "elapsed_s": 6.83
+      "elapsed_s": 6.84
     },
     {
       "id": "t12_malformed_id",
@@ -102,7 +102,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"rejection\": \"contract not found. (not_found)\"}",
-      "elapsed_s": 1.49
+      "elapsed_s": 1.46
     },
     {
       "id": "t13_offset_past_end",
@@ -118,7 +118,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"not_available\": [\"SalarySlip.list\"]}",
-      "elapsed_s": 1.25
+      "elapsed_s": 1.2
     },
     {
       "id": "t15_obligation_workflow_guard",
@@ -126,7 +126,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"rejection\": \"No transition from 'pending' to 'completed' in flow 'ContractObligationFlow': th\"}",
-      "elapsed_s": 3.12
+      "elapsed_s": 3.22
     },
     {
       "id": "t16_contract_get_missing",
@@ -134,7 +134,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"rejection\": \"contract not found. (not_found)\"}",
-      "elapsed_s": 1.45
+      "elapsed_s": 1.5
     },
     {
       "id": "t17_tools_describe_available",
@@ -142,7 +142,7 @@
       "passed": true,
       "score": 1.0,
       "evidence": "{\"pass\": true, \"has_schema\": true}",
-      "elapsed_s": 1.24
+      "elapsed_s": 1.27
     }
   ],
   "summary": "18/18 passed"

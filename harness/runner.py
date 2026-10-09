@@ -41,7 +41,6 @@ from harness.verifiers import (
 
 RESULTS = Path("results.json")
 
-
 TASKS = [
     ("t0_health_check", "Auth works and tools/list returns tools", verify_health_check),
     ("t1_renewal_forecast", "Expiring contracts match the DB", verify_renewal_forecast),
@@ -63,11 +62,17 @@ TASKS = [
     ("t17_tools_describe_available", "tools.describe returns schema", verify_tools_describe_available),
 ]
 
+_cached_a17 = None
+
 
 def run_one(task_id, title, verifier):
+    global _cached_a17
     try:
         if task_id.startswith(("t1_", "t2_", "t3_", "t4_", "t5_")):
-            answer = answer_a17(horizon_days=60)
+            if _cached_a17 is None:
+                print("  (running answer_a17 once — caching for t1-t5)")
+                _cached_a17 = answer_a17(horizon_days=60)
+            answer = _cached_a17
         elif task_id.startswith(("t6_", "t7_")):
             answer = answer_t7_refusal()
         else:
