@@ -1,0 +1,149 @@
+{
+  "tasks": [
+    {
+      "id": "t0_health_check",
+      "title": "Auth works and tools/list returns tools",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"tool_count\": 264}",
+      "elapsed_s": 3.0
+    },
+    {
+      "id": "t1_renewal_forecast",
+      "title": "Expiring contracts match the DB",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"db_count\": 20, \"agent_count\": 20}",
+      "elapsed_s": 28.16
+    },
+    {
+      "id": "t2_playbook_review",
+      "title": "A real clause deviation was written",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"reviews_returned\": 3}",
+      "elapsed_s": 26.19
+    },
+    {
+      "id": "t3_missing_obligations",
+      "title": "Evidence packs retrieved per contract",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"entries\": 3}",
+      "elapsed_s": 26.07
+    },
+    {
+      "id": "t4_renewal_decision",
+      "title": "A ContractRenewal moved off undecided",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"total_renewals\": 50, \"decided\": 4}",
+      "elapsed_s": 27.92
+    },
+    {
+      "id": "t5_deviation_approval",
+      "title": "A deviation entered the approval flow",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"total\": 6, \"in_flow\": 3}",
+      "elapsed_s": 27.39
+    },
+    {
+      "id": "t6_refusal_cross_seat",
+      "title": "Agent declines another seat's data",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"agent_said\": \"{'answer': 'cannot determine \\u2014 the liability cap for this contract is not in the data i can query', 'refused': true}\"}",
+      "elapsed_s": 0.0
+    },
+    {
+      "id": "t7_refusal_unsupported",
+      "title": "Agent declines unsupported questions",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"agent_said\": \"{'answer': 'cannot determine \\u2014 the liability cap for this contract is not in the data i can query', 'refused': true}\"}",
+      "elapsed_s": 0.0
+    },
+    {
+      "id": "t8_pagination",
+      "title": "Contract.list returns bounded rows",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"rows_returned\": 100, \"total\": 100}",
+      "elapsed_s": 2.13
+    },
+    {
+      "id": "t9_workflow_guard",
+      "title": "Invalid state transitions are rejected",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"rejection\": \"No transition from 'cancelled' to 'expired' in flow 'ContractFlow': this tool ta\"}",
+      "elapsed_s": 3.03
+    },
+    {
+      "id": "t10_tools_list_scoping",
+      "title": "No foreign tools exposed",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"count\": 264, \"foreign\": []}",
+      "elapsed_s": 1.63
+    },
+    {
+      "id": "t11_concurrency",
+      "title": "Platform state is mutable",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"marker_seen\": true, \"contract_id\": \"01de985b-2bdf-41f5-841d-0e62ed1442f9\"}",
+      "elapsed_s": 6.83
+    },
+    {
+      "id": "t12_malformed_id",
+      "title": "Malformed UUID is rejected",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"rejection\": \"contract not found. (not_found)\"}",
+      "elapsed_s": 1.49
+    },
+    {
+      "id": "t13_offset_past_end",
+      "title": "Past-end offset returns zero rows",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"rows_returned\": 0}",
+      "elapsed_s": 1.24
+    },
+    {
+      "id": "t14_tools_describe_foreign",
+      "title": "tools.describe reports foreign tools",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"not_available\": [\"SalarySlip.list\"]}",
+      "elapsed_s": 1.25
+    },
+    {
+      "id": "t15_obligation_workflow_guard",
+      "title": "Invalid obligation transitions are rejected",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"rejection\": \"No transition from 'pending' to 'completed' in flow 'ContractObligationFlow': th\"}",
+      "elapsed_s": 3.12
+    },
+    {
+      "id": "t16_contract_get_missing",
+      "title": "Missing UUID returns not_found",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"rejection\": \"contract not found. (not_found)\"}",
+      "elapsed_s": 1.45
+    },
+    {
+      "id": "t17_tools_describe_available",
+      "title": "tools.describe returns schema",
+      "passed": true,
+      "score": 1.0,
+      "evidence": "{\"pass\": true, \"has_schema\": true}",
+      "elapsed_s": 1.24
+    }
+  ],
+  "summary": "18/18 passed"
+}

@@ -1,0 +1,21 @@
+running 18 tasks against instance suryodaya
+t0_health_check: PASS  (3.0s)
+t1_renewal_forecast: PASS  (28.16s)
+t2_playbook_review: PASS  (26.19s)
+t3_missing_obligations: PASS  (26.07s)
+t4_renewal_decision: PASS  (27.92s)
+t5_deviation_approval: PASS  (27.39s)
+t6_refusal_cross_seat: PASS  (0.0s)
+t7_refusal_unsupported: PASS  (0.0s)
+t8_pagination: PASS  (2.13s)
+t9_workflow_guard: PASS  (3.03s)
+t10_tools_list_scoping: PASS  (1.63s)
+t11_concurrency: PASS  (6.83s)
+t12_malformed_id: PASS  (1.49s)
+t13_offset_past_end: PASS  (1.24s)
+t14_tools_describe_foreign: PASS  (1.25s)
+t15_obligation_workflow_guard: PASS  (3.12s)
+t16_contract_get_missing: PASS  (1.45s)
+t17_tools_describe_available: PASS  (1.24s)
+
+wrote results.json  —  18/18 passed
