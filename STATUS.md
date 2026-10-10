@@ -73,3 +73,11 @@ https://github.com/ranjani-cse/contract-agent
 ## Latest harness run
 
 16/16 PASS. Log in harness_live_run.txt
+
+## Platform run — 2026-10-10
+
+Official harness run on the AgentSwitch platform: **18/18 PASS**.
+
+Ran via "Our harness → Submit for a run" against a fresh Suryodaya instance.
+Uses the cached runner (harness/runner.py) — one answer_a17 call shared
+across t1-t5, ~55 seconds total.
