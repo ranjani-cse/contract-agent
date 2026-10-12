@@ -393,3 +393,46 @@ def route_task(prompt):
         return answer_a17(horizon_days=60)
 
     return {"error": "task not recognised", "prompt": prompt}
+
+
+def route_task_llm(prompt):
+    """Route a free-text prompt using the platform's OpenAI-compatible model.
+
+    Falls back to keyword matching if the LLM is unavailable.
+    """
+    import os
+    try:
+        from openai import OpenAI
+    except ImportError:
+        # openai not installed — fall back to keywords
+        return route_task(prompt)
+
+    try:
+        client = OpenAI()
+        r = client.chat.completions.create(
+            model=os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
+            messages=[
+                {"role": "system", "content":
+                    "Classify the user's contracts-related request into ONE of these labels:\n"
+                    "dispute, blockers, renewal_risk, playbook_drift, renewal_package, "
+                    "portfolio_audit, expiry, unknown.\n"
+                    "Reply with the single label and nothing else."},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0,
+        )
+        tag = r.choices[0].message.content.strip().lower()
+    except Exception:
+        # LLM call failed — fall back to keywords
+        return route_task(prompt)
+
+    handlers = {
+        "dispute": answer_c1_disputed_quarter,
+        "blockers": answer_c2_close_blockers,
+        "renewal_risk": answer_c3_auto_renewal_risk,
+        "playbook_drift": answer_c4_playbook_drift,
+        "renewal_package": answer_c5_renewal_package,
+        "portfolio_audit": answer_c6_portfolio_audit,
+        "expiry": lambda: answer_a17(horizon_days=60),
+    }
+    return handlers.get(tag, lambda: {"error": "unclassified", "prompt": prompt, "label": tag})()
