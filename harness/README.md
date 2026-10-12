@@ -1,6 +1,6 @@
 # Harness — Contracts Agent (Team 17)
 
-An 18-task evaluation of the A17 agent against live AgentSwitch data.
+An 23-task evaluation of the A17 agent against live AgentSwitch data.
 
 ## How to run
 
@@ -14,7 +14,7 @@ An 18-task evaluation of the A17 agent against live AgentSwitch data.
 | File | Purpose |
 |---|---|
 | `run_harness.py` | Loop: load tasks, run agent, verify, log |
-| `tasks.jsonl` | 18 tasks including 2 refusal tasks |
+| `tasks.jsonl` | 23 tasks including 2 refusal tasks |
 | `verifiers.py` | DB-reading verifiers, one per task |
 
 ## Tasks
@@ -38,6 +38,11 @@ An 18-task evaluation of the A17 agent against live AgentSwitch data.
 | t15_obligation_workflow_guard | Invalid obligation transitions are rejected |
 | t16_contract_get_missing | Contract.get on a valid-format UUID returns not_found |
 | t17_tools_describe_available | tools.describe returns schema for available tools |
+| c1_disputed_quarter | Multi-step party contract summary |
+| c2_close_blockers | Find obligations blocking close |
+| c3_auto_renewal_risk | Flag at-risk auto-renewals |
+| c4_playbook_drift | Portfolio playbook analysis |
+| c5_renewal_package | Renewal decision package |
 
 ## Design
 
@@ -47,4 +52,4 @@ An 18-task evaluation of the A17 agent against live AgentSwitch data.
 
 ## Current status
 
-18/18 PASS. Latest run: `../harness_live_run.txt`
+23/23 PASS. Latest run: `../harness_live_run.txt`
