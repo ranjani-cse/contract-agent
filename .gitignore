@@ -8,3 +8,4 @@ tools_raw.json
 runs/*.jsonl
 __pycache__/
 *.pyc
+results.json
