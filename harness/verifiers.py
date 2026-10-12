@@ -358,3 +358,18 @@ def verify_c5_renewal_package(agent_answer):
     ok = has_rec and has_met and has_missed and has_dev
     return {"pass": ok, "recommendation": agent_answer.get("recommendation"),
             "obligations_missed": agent_answer.get("obligations_missed")}
+
+
+def verify_c6_portfolio_audit(agent_answer):
+    """Agent must return a prioritized portfolio audit."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "no answer"}
+    has_blockers = isinstance(agent_answer.get("blockers_found"), int)
+    has_risk = isinstance(agent_answer.get("renewal_at_risk"), int)
+    has_drift = isinstance(agent_answer.get("drift_reports"), int)
+    has_priority = isinstance(agent_answer.get("priority_list"), list)
+    ok = has_blockers and has_risk and has_drift and has_priority
+    return {"pass": ok,
+            "priority_count": len(agent_answer.get("priority_list", [])),
+            "blockers": agent_answer.get("blockers_found"),
+            "renewal_risk": agent_answer.get("renewal_at_risk")}

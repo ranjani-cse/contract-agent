@@ -322,3 +322,52 @@ def answer_c4_playbook_drift():
 
     drift.sort(key=lambda x: -x["missing_clauses"])
     return {"contracts_scanned": len(rows), "drift_reports": drift[:10]}
+
+
+def answer_c6_portfolio_audit():
+    """Full portfolio audit: blockers + renewal risk + playbook drift.
+
+    Chains c2, c3, and c4 into one prioritized report.
+    """
+    blockers = answer_c2_close_blockers()
+    risk = answer_c3_auto_renewal_risk()
+    drift = answer_c4_playbook_drift()
+
+    # score each contract by total issues found
+    scores = {}
+
+    for b in blockers.get("blockers", []):
+        cid = b.get("contract_id")
+        scores.setdefault(cid, {"blockers": 0, "renewal_risk": 0, "drift": 0})
+        scores[cid]["blockers"] += 1
+
+    for r in risk.get("at_risk", []):
+        cid = r.get("contract_id")
+        scores.setdefault(cid, {"blockers": 0, "renewal_risk": 0, "drift": 0})
+        scores[cid]["renewal_risk"] += len(r.get("risks", []))
+
+    for d in drift.get("drift_reports", []):
+        cid = d.get("contract_id")
+        scores.setdefault(cid, {"blockers": 0, "renewal_risk": 0, "drift": 0})
+        scores[cid]["drift"] += d.get("missing_clauses", 0)
+
+    # prioritise: most issues first
+    priority = []
+    for cid, s in scores.items():
+        total = s["blockers"] + s["renewal_risk"] + s["drift"]
+        if total > 0:
+            priority.append({
+                "contract_id": cid,
+                "total_issues": total,
+                "breakdown": s,
+            })
+
+    priority.sort(key=lambda x: -x["total_issues"])
+
+    return {
+        "blockers_found": blockers.get("blockers_found", 0),
+        "renewal_at_risk": len(risk.get("at_risk", [])),
+        "drift_reports": len(drift.get("drift_reports", [])),
+        "priority_list": priority[:10],
+        "summary": f"{len(priority)} contracts need attention",
+    }

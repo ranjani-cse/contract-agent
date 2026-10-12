@@ -19,6 +19,7 @@ from agent.agent import (
     answer_c3_auto_renewal_risk,
     answer_c4_playbook_drift,
     answer_c5_renewal_package,
+    answer_c6_portfolio_audit,
     answer_t7_refusal,
 )
 from harness.verifiers import (
@@ -45,6 +46,7 @@ from harness.verifiers import (
     verify_c3_auto_renewal_risk,
     verify_c4_playbook_drift,
     verify_c5_renewal_package,
+    verify_c6_portfolio_audit,
 )
 
 RESULTS = Path("results.json")
@@ -73,6 +75,7 @@ TASKS = [
     ("c3_auto_renewal_risk", "Flag at-risk auto-renewals", verify_c3_auto_renewal_risk),
     ("c4_playbook_drift", "Portfolio playbook analysis", verify_c4_playbook_drift),
     ("c5_renewal_package", "Renewal decision package", verify_c5_renewal_package),
+    ("c6_portfolio_audit", "Full portfolio audit — blockers, risk, drift", verify_c6_portfolio_audit),
 ]
 
 _cached_a17 = None
@@ -98,6 +101,8 @@ def run_one(task_id, title, verifier):
             answer = answer_c4_playbook_drift()
         elif task_id == "c5_renewal_package":
             answer = answer_c5_renewal_package()
+        elif task_id == "c6_portfolio_audit":
+            answer = answer_c6_portfolio_audit()
         else:
             answer = None
 
