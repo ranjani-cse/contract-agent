@@ -81,3 +81,15 @@ Official harness run on the AgentSwitch platform: **18/18 PASS**.
 Ran via "Our harness → Submit for a run" against a fresh Suryodaya instance.
 Uses the cached runner (harness/runner.py) — one answer_a17 call shared
 across t1-t5, ~55 seconds total.
+
+## 2026-10-12 — Complex tasks added
+
+Added c1–c5 (multi-step business requests) to the harness:
+- c1 disputed quarter — party contract summary (15.9s)
+- c2 close blockers — incomplete obligations (8.1s)
+- c3 auto-renewal risk — flag at-risk contracts (24.2s)
+- c4 playbook drift — clause coverage analysis (9.9s)
+- c5 renewal package — decision package with recommendation (7.2s)
+
+Local run: **23/23 PASS** in ~2 minutes.
+Next: submit on the platform when the 3-day window opens.
