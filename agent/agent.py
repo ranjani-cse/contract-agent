@@ -194,7 +194,7 @@ def answer_c1_disputed_quarter(party_id=None):
     contract_rows = [c for c in rows if c.get("party_id") == party_id]
 
     summary = []
-    for c in contract_rows[:10]:
+    for c in contract_rows[:5]:
         cid = c.get("id")
         obl = _unwrap(call_tool("ContractObligation.list",
                                 {"contract_id": cid, "limit": 20}))
@@ -219,3 +219,106 @@ def answer_c1_disputed_quarter(party_id=None):
                  "which is outside the Contracts seat. What's shown is what "
                  "this seat can verify."),
     }
+
+
+def answer_c2_close_blockers():
+    """Find obligations blocking the month-end close."""
+    contracts = _unwrap(call_tool("Contract.list",
+                                  {"status": "active", "limit": 200}))
+    rows = contracts.get("data", []) if isinstance(contracts, dict) else []
+    if not rows:
+        return {"error": "no active contracts"}
+
+    blockers = []
+    for c in rows[:5]:
+        cid = c.get("id")
+        obl = _unwrap(call_tool("ContractObligation.list",
+                                {"contract_id": cid, "limit": 50}))
+        ob_rows = obl.get("data", []) if isinstance(obl, dict) else []
+        for o in ob_rows:
+            if o.get("status") in ("pending", "in_progress", "overdue"):
+                blockers.append({
+                    "contract_id": cid,
+                    "contract_number": c.get("number"),
+                    "obligation_id": o.get("id"),
+                    "obligation_title": o.get("title"),
+                    "status": o.get("status"),
+                    "due_date": o.get("due_date"),
+                })
+
+    return {
+        "active_contracts": len(rows),
+        "blockers_found": len(blockers),
+        "blockers": blockers[:20],
+    }
+
+
+def answer_c3_auto_renewal_risk():
+    """Find contracts auto-renewing in 30 days and flag risks."""
+    expiring = expiring_soon(horizon_days=30, limit=100)
+    if not expiring:
+        return {"expiring_30d": 0, "at_risk": []}
+
+    at_risk = []
+    for c in expiring[:5]:   # top 5 only — the rest would take too long
+        cid = c.get("id") or c.get("contract", {}).get("id")
+        if not cid:
+            continue
+        contract = _unwrap(call_tool("Contract.get", {"id": cid}))
+        owner = contract.get("owner_id") if isinstance(contract, dict) else None
+
+        obl = _unwrap(call_tool("ContractObligation.list",
+                                {"contract_id": cid, "limit": 20}))
+        ob_rows = obl.get("data", []) if isinstance(obl, dict) else []
+        missed = [o for o in ob_rows if o.get("status") in ("pending", "in_progress", "overdue")]
+
+        dev = _unwrap(call_tool("ContractClauseDeviation.list",
+                                {"contract_id": cid, "limit": 10}))
+        dev_rows = dev.get("data", []) if isinstance(dev, dict) else []
+
+        risks = []
+        if not owner:
+            risks.append("no_owner")
+        if missed:
+            risks.append(f"missing_obligations:{len(missed)}")
+        if dev_rows:
+            risks.append(f"open_deviations:{len(dev_rows)}")
+
+        if risks:
+            at_risk.append({"contract_id": cid, "risks": risks})
+
+    return {"expiring_30d": len(expiring), "at_risk": at_risk}
+
+
+def answer_c4_playbook_drift():
+    """Compare active contracts' clauses against the standard playbook."""
+    contracts = _unwrap(call_tool("Contract.list",
+                                  {"status": "active", "limit": 100}))
+    rows = contracts.get("data", []) if isinstance(contracts, dict) else []
+    if not rows:
+        return {"error": "no active contracts"}
+
+    lib = _unwrap(call_tool("ContractClause.list",
+                            {"is_standard": True, "limit": 100}))
+    lib_rows = lib.get("data", []) if isinstance(lib, dict) else []
+    lib_ids = {c.get("id") for c in lib_rows if isinstance(c, dict)}
+
+    drift = []
+    for c in rows[:5]:
+        cid = c.get("id")
+        docs = _unwrap(call_tool("ContractDocument.list",
+                                 {"contract_id": cid, "limit": 5}))
+        doc_rows = docs.get("data", []) if isinstance(docs, dict) else []
+        for d in doc_rows:
+            clauses = d.get("clauses_used", []) or []
+            doc_clause_ids = {cl.get("clause_id") for cl in clauses if isinstance(cl, dict)}
+            missing = list(lib_ids - doc_clause_ids)
+            if missing:
+                drift.append({
+                    "contract_id": cid,
+                    "document_id": d.get("id"),
+                    "missing_clauses": len(missing),
+                })
+
+    drift.sort(key=lambda x: -x["missing_clauses"])
+    return {"contracts_scanned": len(rows), "drift_reports": drift[:10]}

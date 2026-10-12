@@ -299,3 +299,62 @@ def verify_tools_describe_available(agent_answer):
         return {"pass": False, "reason": "no schema returned for Contract.list"}
     schema = results[0].get("inputSchema", {})
     return {"pass": bool(schema), "has_schema": bool(schema)}
+
+
+def verify_c2_close_blockers(agent_answer):
+    """Agent must return active contracts and a blockers list."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "no answer"}
+    has_active = isinstance(agent_answer.get("active_contracts"), int)
+    has_blockers = isinstance(agent_answer.get("blockers"), list)
+    has_count = isinstance(agent_answer.get("blockers_found"), int)
+    ok = has_active and has_blockers and has_count
+    return {"pass": ok, "active": agent_answer.get("active_contracts"),
+            "blockers_found": agent_answer.get("blockers_found")}
+
+
+def verify_c3_auto_renewal_risk(agent_answer):
+    """Agent must return expiring count and at-risk list."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "no answer"}
+    has_exp = isinstance(agent_answer.get("expiring_30d"), int)
+    has_risk = isinstance(agent_answer.get("at_risk"), list)
+    ok = has_exp and has_risk
+    return {"pass": ok, "expiring_30d": agent_answer.get("expiring_30d"),
+            "at_risk_count": len(agent_answer.get("at_risk", []))}
+
+
+def verify_c4_playbook_drift(agent_answer):
+    """Agent must return contracts scanned and drift reports."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "no answer"}
+    has_scanned = isinstance(agent_answer.get("contracts_scanned"), int)
+    has_drift = isinstance(agent_answer.get("drift_reports"), list)
+    ok = has_scanned and has_drift
+    return {"pass": ok, "scanned": agent_answer.get("contracts_scanned"),
+            "drift_count": len(agent_answer.get("drift_reports", []))}
+
+
+def verify_c1_disputed_quarter(agent_answer):
+    """Agent must return a party's contracts with obligations and deviations."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "no answer"}
+    has_party = bool(agent_answer.get("party_id"))
+    has_summary = isinstance(agent_answer.get("summary"), list) and len(agent_answer["summary"]) > 0
+    has_count = isinstance(agent_answer.get("contracts_found"), int)
+    ok = has_party and has_summary and has_count
+    return {"pass": ok, "party_id": agent_answer.get("party_id"),
+            "contracts_found": agent_answer.get("contracts_found")}
+
+
+def verify_c5_renewal_package(agent_answer):
+    """Agent must return a recommendation with obligations and deviations."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "no answer"}
+    has_rec = agent_answer.get("recommendation") in ("renew", "renegotiate", "review")
+    has_met = isinstance(agent_answer.get("obligations_met"), int)
+    has_missed = isinstance(agent_answer.get("obligations_missed"), int)
+    has_dev = isinstance(agent_answer.get("open_deviations"), int)
+    ok = has_rec and has_met and has_missed and has_dev
+    return {"pass": ok, "recommendation": agent_answer.get("recommendation"),
+            "obligations_missed": agent_answer.get("obligations_missed")}

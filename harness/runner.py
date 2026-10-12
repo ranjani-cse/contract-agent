@@ -15,6 +15,9 @@ from pathlib import Path
 from agent.agent import (
     answer_a17,
     answer_c1_disputed_quarter,
+    answer_c2_close_blockers,
+    answer_c3_auto_renewal_risk,
+    answer_c4_playbook_drift,
     answer_c5_renewal_package,
     answer_t7_refusal,
 )
@@ -37,6 +40,11 @@ from harness.verifiers import (
     verify_obligation_workflow_guard,
     verify_contract_get_missing,
     verify_tools_describe_available,
+    verify_c1_disputed_quarter,
+    verify_c2_close_blockers,
+    verify_c3_auto_renewal_risk,
+    verify_c4_playbook_drift,
+    verify_c5_renewal_package,
 )
 
 RESULTS = Path("results.json")
@@ -60,6 +68,11 @@ TASKS = [
     ("t15_obligation_workflow_guard", "Invalid obligation transitions are rejected", verify_obligation_workflow_guard),
     ("t16_contract_get_missing", "Missing UUID returns not_found", verify_contract_get_missing),
     ("t17_tools_describe_available", "tools.describe returns schema", verify_tools_describe_available),
+    ("c1_disputed_quarter", "Multi-step party contract summary", verify_c1_disputed_quarter),
+    ("c2_close_blockers", "Find obligations blocking close", verify_c2_close_blockers),
+    ("c3_auto_renewal_risk", "Flag at-risk auto-renewals", verify_c3_auto_renewal_risk),
+    ("c4_playbook_drift", "Portfolio playbook analysis", verify_c4_playbook_drift),
+    ("c5_renewal_package", "Renewal decision package", verify_c5_renewal_package),
 ]
 
 _cached_a17 = None
@@ -75,6 +88,16 @@ def run_one(task_id, title, verifier):
             answer = _cached_a17
         elif task_id.startswith(("t6_", "t7_")):
             answer = answer_t7_refusal()
+        elif task_id == "c1_disputed_quarter":
+            answer = answer_c1_disputed_quarter()
+        elif task_id == "c2_close_blockers":
+            answer = answer_c2_close_blockers()
+        elif task_id == "c3_auto_renewal_risk":
+            answer = answer_c3_auto_renewal_risk()
+        elif task_id == "c4_playbook_drift":
+            answer = answer_c4_playbook_drift()
+        elif task_id == "c5_renewal_package":
+            answer = answer_c5_renewal_package()
         else:
             answer = None
 
