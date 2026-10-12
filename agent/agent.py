@@ -371,3 +371,25 @@ def answer_c6_portfolio_audit():
         "priority_list": priority[:10],
         "summary": f"{len(priority)} contracts need attention",
     }
+
+
+def route_task(prompt):
+    """Route a free-text prompt to the right agent handler."""
+    p = (prompt or "").lower()
+
+    if "portfolio" in p or "audit" in p or "priorit" in p:
+        return answer_c6_portfolio_audit()
+    if "dispute" in p:
+        return answer_c1_disputed_quarter()
+    if "block" in p or "sign-off" in p or "close" in p:
+        return answer_c2_close_blockers()
+    if "auto-renew" in p or ("renew" in p and "30" in p) or "at risk" in p:
+        return answer_c3_auto_renewal_risk()
+    if "playbook" in p or "drift" in p or "clause" in p:
+        return answer_c4_playbook_drift()
+    if "renewal package" in p or "decision" in p or "recommend" in p:
+        return answer_c5_renewal_package()
+    if "expir" in p:
+        return answer_a17(horizon_days=60)
+
+    return {"error": "task not recognised", "prompt": prompt}
