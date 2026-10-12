@@ -93,3 +93,13 @@ Added c1–c5 (multi-step business requests) to the harness:
 
 Local run: **23/23 PASS** in ~2 minutes.
 Next: submit on the platform when the 3-day window opens.
+
+## Tests
+
+43 hand-written tests:
+- 23 covering the 9 filed bugs (t0-t17 behaviors)
+- 12 covering c1-c6 complex tasks
+- 8 covering the dispatcher
+
+Run: `python3 -c "from tests.test_c1_disputed_quarter import *"` etc.
+All passing locally.
