@@ -103,3 +103,10 @@ Next: submit on the platform when the 3-day window opens.
 
 Run: `python3 -c "from tests.test_c1_disputed_quarter import *"` etc.
 All passing locally.
+
+## Platform run — 2026-10-13
+
+**24/24 PASS** on the platform (Suryodaya instance).
+
+All 18 base tasks + 6 complex tasks passed on the server.
+See `PLATFORM_RUN_24.md` for full evidence.
