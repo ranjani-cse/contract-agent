@@ -121,7 +121,7 @@ See `PLATFORM_RUN_24.md` for full evidence.
 
 ## Session — 2026-10-16 (harness extension)
 
-**Extended the harness from 24 to 31 tasks.** Added six complex handlers
+**Extended the harness from 24 to 32 tasks.** Added six complex handlers
 (c7-c12) and one dispatcher self-test (t18).
 
 | Task | Purpose | Local |
@@ -134,7 +134,7 @@ See `PLATFORM_RUN_24.md` for full evidence.
 | c12 contracts without owner| Filter contracts missing owner_id              | PASS |
 | t18 route_task             | Dispatcher routes free-text prompt to handler  | PASS |
 
-**Local run:** 31/31 PASS
+**Local run:** 32/32 PASS
 **Latest commit:** 42f553d (pushed to origin/main)
 
 ### Also updated

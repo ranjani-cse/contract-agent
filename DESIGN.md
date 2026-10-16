@@ -140,11 +140,11 @@ invents an answer fails, no matter how well-written it is.
 
 ## Overview
 
-The harness runs 31 tasks against the Contracts seat:
+The harness runs 32 tasks against the Contracts seat:
 
 - t0-t17 - 18 base tasks (auth, pagination, workflow guards, refusals)
 - c1-c12 - 12 complex tasks, each chaining multiple tool calls
-- t18 - dispatcher test: proves free-text prompts route to the right handler
+- t18/t19 - dispatcher tests (keyword + LLM): proves free-text prompts route to the right handler
 
 All 31 run through harness/runner.py, which invokes an answer_* in
 agent/agent.py and a matching verify_* in harness/verifiers.py.

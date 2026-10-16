@@ -12,9 +12,9 @@ An agent for the Contracts seat that reviews contracts against a playbook, flags
 - **Agent** (`agent/agent.py`) answers the A17 request against live data:
   expiring contracts, playbook review (writes real deviations), missing
   obligations, renewal decisions, and deviation approvals.
-- **Harness** (`harness/`) — 31 tasks: 18 base (t0-t17), 12 complex (c1-c12),
-  plus a dispatcher test (t18). Verifiers read the database, not the agent's
-  output. 31/31 PASS locally.
+- **Harness** (`harness/`) — 32 tasks: 18 base (t0-t17), 12 complex (c1-c12),
+  plus two dispatcher tests (t18 keyword, t19 LLM). Verifiers read the database, not the agent's
+  output. 32/32 PASS locally.
 - **Tests** (`tests/`) — 25+ hand-written tests: base behaviors, complex
   handlers (c1-c12), dispatcher (t18), and one file per filed bug.
 - **Bugs** — 9 filed against `endpoint.contracts.*` and `tools.search`.
@@ -36,7 +36,7 @@ An agent for the Contracts seat that reviews contracts against a playbook, flags
     FINDINGS.md     One-page summary of the investigation
     STATUS.md       Session log and milestones
     PLATFORM_RUN_24.md  First platform result (24 tasks)
-    PLATFORM_RUN_31.md  Second platform result (31 tasks)
+    PLATFORM_RUN_31.md  Second platform result (32 tasks)
 
 ## Documentation
 
@@ -51,12 +51,12 @@ An agent for the Contracts seat that reviews contracts against a playbook, flags
 | `harness/README.md` | Harness tasks and design |
 | `STATUS.md` | Session log and platform milestones |
 | `PLATFORM_RUN_24.md` | First platform result (24 tasks) |
-| `PLATFORM_RUN_31.md` | Second platform result (31 tasks) |
+| `PLATFORM_RUN_31.md` | Second platform result (32 tasks) |
 
 ## Current status
 
-- **31 tasks** in the suite: 18 base (t0-t17), 12 complex (c1-c12), 1 dispatcher (t18)
-- **Local run:** 31/31 PASS
+- **32 tasks** in the suite: 18 base (t0-t17), 12 complex (c1-c12), 1 dispatcher (t18)
+- **Local run:** 32/32 PASS
 - **Latest commit:** 2094c13 (origin/main)
 - **Server run:** pending — will be recorded in `PLATFORM_RUN_31.md`
 - **Dispatcher:** `route_task` (keyword, deterministic) + `route_task_llm`
