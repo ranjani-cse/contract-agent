@@ -552,6 +552,27 @@ def route_task(prompt):
     """Route a free-text prompt to the right agent handler."""
     p = (prompt or "").lower()
 
+    # Multi-intent pre-check: if the prompt matches 2+ handler keywords,
+    # let the planner compose a plan instead of picking one branch.
+    intent_hits = 0
+    if any(k in p for k in ("renew", "auto-renew", "expiring", "expiry", "at risk")): intent_hits += 1
+    if "overdue" in p or "attest" in p: intent_hits += 1
+    if "amendment" in p: intent_hits += 1
+    if "approv" in p: intent_hits += 1
+    if "owner" in p: intent_hits += 1
+    if "preference" in p: intent_hits += 1
+    if "template" in p or "playbook" in p or "drift" in p: intent_hits += 1
+    if "block" in p or "close" in p: intent_hits += 1
+
+    if intent_hits >= 2:
+        try:
+            from agent.agent_loop import plan_and_execute
+            planned = plan_and_execute(prompt)
+            if planned and planned.get("steps_run", 0) > 0:
+                return planned
+        except Exception:
+            pass
+
     if "owner" in p or ("without" in p and "contract" in p):
         return answer_c12_contracts_without_owner()
     if "approv" in p:
@@ -580,6 +601,14 @@ def route_task(prompt):
     if "expir" in p:
         return answer_a17(horizon_days=60)
 
+    # Fallback: let the planner compose a plan for unrecognised prompts
+    try:
+        from agent.agent_loop import plan_and_execute
+        planned = plan_and_execute(prompt)
+        if planned and planned.get("steps_run", 0) > 0:
+            return planned
+    except Exception:
+        pass
     return {"error": "task not recognised", "prompt": prompt}
 
 
