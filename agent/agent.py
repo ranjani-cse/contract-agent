@@ -501,6 +501,24 @@ def answer_c12_contracts_without_owner():
     }
 
 
+
+def answer_t18_route_task():
+    """t18 — Exercise the dispatcher end-to-end on a real prompt."""
+    prompt = "Which obligations are overdue and unattested?"
+    # route_task is keyword-based (deterministic, no LLM dependency)
+    result = route_task(prompt)
+    return {
+        "prompt": prompt,
+        "result_keys": sorted(result.keys()) if isinstance(result, dict) else [],
+        "result_type": type(result).__name__,
+        "is_error": isinstance(result, dict) and "error" in result,
+        "sample_count": (
+            result.get("overdue_unattested_count")
+            if isinstance(result, dict) else None
+        ),
+    }
+
+
 def route_task(prompt):
     """Route a free-text prompt to the right agent handler."""
     p = (prompt or "").lower()
@@ -556,7 +574,8 @@ def route_task_llm(prompt):
                 {"role": "system", "content":
                     "Classify the user's contracts-related request into ONE of these labels:\n"
                     "dispute, blockers, renewal_risk, playbook_drift, renewal_package, "
-                    "portfolio_audit, expiry, unknown.\n"
+                    "portfolio_audit, expiry, templates, preferences, amendments, "
+                    "overdue_obligations, approvals, missing_owner, unknown.\n"
                     "Reply with the single label and nothing else."},
                 {"role": "user", "content": prompt},
             ],
@@ -575,5 +594,11 @@ def route_task_llm(prompt):
         "renewal_package": answer_c5_renewal_package,
         "portfolio_audit": answer_c6_portfolio_audit,
         "expiry": lambda: answer_a17(horizon_days=60),
+        "templates": answer_c7_templates_and_playbooks,
+        "preferences": answer_c8_contract_preferences,
+        "amendments": answer_c9_active_amendments,
+        "overdue_obligations": answer_c10_overdue_unattested,
+        "approvals": answer_c11_approval_history,
+        "missing_owner": answer_c12_contracts_without_owner,
     }
     return handlers.get(tag, lambda: {"error": "unclassified", "prompt": prompt, "label": tag})()

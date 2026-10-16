@@ -457,3 +457,20 @@ def verify_c12_contracts_without_owner(agent_answer):
         "without_owner_count": agent_answer.get("without_owner_count", 0),
     }
 
+def verify_t18_route_task(agent_answer):
+    """t18 — dispatcher routed the prompt to the correct handler."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "answer not a dict"}
+    if agent_answer.get("is_error"):
+        return {"pass": False, "reason": "routed to error handler",
+                "prompt": agent_answer.get("prompt")}
+    keys = agent_answer.get("result_keys", [])
+    # c10's handler returns these keys
+    expected = {"total_scanned", "overdue_unattested_count", "overdue_unattested"}
+    hit = expected.issubset(set(keys))
+    return {
+        "pass": hit,
+        "result_keys": keys,
+        "routed_ok": hit,
+    }
+
