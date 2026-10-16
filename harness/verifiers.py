@@ -415,3 +415,17 @@ def verify_c9_active_amendments(agent_answer):
         "contracts_with_amendments": with_am,
     }
 
+def verify_c10_overdue_unattested(agent_answer):
+    """c10 — overdue + unattested obligations found."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "answer not a dict"}
+    if "_error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["_error"]}
+    scanned = agent_answer.get("total_scanned", 0)
+    cnt = agent_answer.get("overdue_unattested_count", 0)
+    return {
+        "pass": scanned >= 1 and cnt >= 1,
+        "total_scanned": scanned,
+        "overdue_unattested_count": cnt,
+    }
+

@@ -428,10 +428,39 @@ def answer_c9_active_amendments():
     }
 
 
+
+def answer_c10_overdue_unattested():
+    """c10 — ContractObligation filtered by status=overdue + attestation_state=not_attested."""
+    o = _unwrap(call_tool("ContractObligation.list", {"limit": 500}))
+    rows = o.get("data", []) if isinstance(o, dict) else []
+    flagged = [
+        r for r in rows
+        if r.get("status") == "overdue"
+        and r.get("attestation_state") == "not_attested"
+    ]
+    return {
+        "total_scanned": len(rows),
+        "overdue_unattested_count": len(flagged),
+        "overdue_unattested": [
+            {
+                "id": r.get("id"),
+                "contract_id": r.get("contract_id"),
+                "title": r.get("title"),
+                "due_date": r.get("due_date"),
+                "status": r.get("status"),
+                "attestation_state": r.get("attestation_state"),
+            }
+            for r in flagged[:50]
+        ],
+    }
+
+
 def route_task(prompt):
     """Route a free-text prompt to the right agent handler."""
     p = (prompt or "").lower()
 
+    if "overdue" in p and "attest" in p:
+        return answer_c10_overdue_unattested()
     if "amendment" in p:
         return answer_c9_active_amendments()
     if "preference" in p:

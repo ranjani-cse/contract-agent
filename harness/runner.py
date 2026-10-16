@@ -23,6 +23,7 @@ from agent.agent import (
     answer_c7_templates_and_playbooks,
     answer_c8_contract_preferences,
     answer_c9_active_amendments,
+    answer_c10_overdue_unattested,
     answer_t7_refusal,
 )
 from harness.verifiers import (
@@ -53,6 +54,7 @@ from harness.verifiers import (
     verify_c7_templates_and_playbooks,
     verify_c8_contract_preferences,
     verify_c9_active_amendments,
+    verify_c10_overdue_unattested,
 )
 
 RESULTS = Path("results.json")
@@ -85,6 +87,7 @@ TASKS = [
     ("c7_templates_and_playbooks", "List templates and playbooks", verify_c7_templates_and_playbooks),
     ("c8_contract_preferences", "Read contract preferences", verify_c8_contract_preferences),
     ("c9_active_amendments", "Amendments on active contracts", verify_c9_active_amendments),
+    ("c10_overdue_unattested", "Overdue and unattested obligations", verify_c10_overdue_unattested),
 ]
 
 _cached_a17 = None
@@ -118,6 +121,8 @@ def run_one(task_id, title, verifier):
             answer = answer_c8_contract_preferences()
         elif task_id == "c9_active_amendments":
             answer = answer_c9_active_amendments()
+        elif task_id == "c10_overdue_unattested":
+            answer = answer_c10_overdue_unattested()
         else:
             answer = None
 
