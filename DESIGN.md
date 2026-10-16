@@ -132,3 +132,94 @@ invents an answer fails, no matter how well-written it is.
 | `harness/run_harness.py` | The loop |
 | `harness/tasks.jsonl` | 12 tasks |
 | `harness/verifiers.py` | DB-reading verifiers, one per task |
+
+
+---
+
+# Complex Task Handlers (c1-c12) + Dispatcher (t18)
+
+## Overview
+
+The harness runs 31 tasks against the Contracts seat:
+
+- t0-t17 - 18 base tasks (auth, pagination, workflow guards, refusals)
+- c1-c12 - 12 complex tasks, each chaining multiple tool calls
+- t18 - dispatcher test: proves free-text prompts route to the right handler
+
+All 31 run through harness/runner.py, which invokes an answer_* in
+agent/agent.py and a matching verify_* in harness/verifiers.py.
+
+## Handler shape
+
+Every complex handler follows the same pattern:
+
+    def answer_cN_<name>():
+        raw = _unwrap(call_tool("<Tool>.<method>", {...}))
+        rows = raw.get("data", []) if isinstance(raw, dict) else []
+        # filter / join / aggregate
+        return {<structured result>}
+
+The verifier then asserts on the structured result - counts, keys, or both.
+No handler returns prose; every answer is machine-checkable.
+
+## The 12 complex tasks
+
+| ID  | Task                    | Tools used                                                    | Multi-step    |
+|-----|-------------------------|---------------------------------------------------------------|---------------|
+| c1  | Disputed quarter        | Contract.list + per-contract obligations                      | yes           |
+| c2  | Close blockers          | Contract.list (active) + ContractObligation.list per contract | yes           |
+| c3  | Auto-renewal risk       | endpoint.contracts.renewal_forecast                           | yes           |
+| c4  | Playbook drift          | ContractDocument.list + propose_clause_deviation              | yes           |
+| c5  | Renewal package         | renewal forecast + obligations + deviation history            | yes           |
+| c6  | Portfolio audit         | c2 + c3 + c4 -> score -> prioritize                           | yes (3)       |
+| c7  | Templates + playbooks   | ContractTemplate.list, ContractPlaybook.list                  | -             |
+| c8  | Contract preferences    | ContractPreferences.list                                      | -             |
+| c9  | Amendments on active    | Contract.list + ContractAmendment.list per contract           | yes           |
+| c10 | Overdue + unattested    | ContractObligation.list -> filter status + attestation_state  | yes           |
+| c11 | Approval history        | Contract.list -> approval_request_id / approval_status        | yes           |
+| c12 | Contracts without owner | Contract.list -> filter missing owner_id                      | -             |
+
+## Dispatcher
+
+Two routing functions in agent/agent.py:
+
+route_task(prompt) - deterministic keyword matching. Lowercases the prompt,
+checks ordered if-branches (specific to general), calls the matching handler,
+returns an error dict on miss.
+
+route_task_llm(prompt) - LLM-based classification. Asks the platform model
+to pick one of 14 labels: dispute, blockers, renewal_risk, playbook_drift,
+renewal_package, portfolio_audit, expiry, templates, preferences, amendments,
+overdue_obligations, approvals, missing_owner, unknown. Falls back to
+route_task if the LLM is unavailable.
+
+t18_route_task exercises route_task with
+"Which obligations are overdue and unattested?" - must route to
+answer_c10_overdue_unattested and return the correct keys.
+
+## Design decisions
+
+1. Keyword-first, LLM-optional. The deterministic router always works;
+   the LLM router is a refinement layer.
+2. Every handler returns structured data. Verifiers assert on counts and
+   keys - no prose, reproducible results.
+3. No false passes. Verifiers distinguish "empty but valid" (c12 with 0
+   orphans) from "failed" (auth error, unknown tool).
+4. Tool names verified against tools/list. Each handler uses the exact
+   method name the seat exposes - validated live before commit.
+5. Incremental coverage. One task at a time: write, test locally, commit.
+   Suite was green at every step.
+
+## Coverage matrix
+
+| Entity              | Read | Filter | Aggregate |
+|---------------------|------|--------|-----------|
+| Contract            | yes  | yes    | yes       |
+| ContractObligation  | yes  | yes    | yes       |
+| ContractAmendment   | yes  | yes    | yes       |
+| ContractTemplate    | yes  | -      | yes       |
+| ContractPlaybook    | yes  | -      | yes       |
+| ContractPreferences | yes  | -      | -         |
+| ContractDocument    | yes  | -      | yes       |
+| ContractRenewal     | yes  | yes    | yes       |
+| PrivacyAuditEvent   | yes  | -      | -         |
