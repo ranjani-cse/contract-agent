@@ -403,10 +403,37 @@ def answer_c8_contract_preferences():
     }
 
 
+
+def answer_c9_active_amendments():
+    """c9 — List ContractAmendment on active contracts."""
+    c = _unwrap(call_tool("Contract.list", {"status": "active", "limit": 200}))
+    contracts = c.get("data", []) if isinstance(c, dict) else []
+    out = []
+    for contract in contracts[:20]:
+        cid = contract.get("id")
+        a = _unwrap(call_tool("ContractAmendment.list",
+                              {"contract_id": cid, "limit": 50}))
+        rows = a.get("data", []) if isinstance(a, dict) else []
+        if rows:
+            out.append({
+                "contract_id": cid,
+                "contract_number": contract.get("number"),
+                "amendment_count": len(rows),
+                "amendments": rows,
+            })
+    return {
+        "active_contracts": len(contracts),
+        "contracts_with_amendments": len(out),
+        "details": out,
+    }
+
+
 def route_task(prompt):
     """Route a free-text prompt to the right agent handler."""
     p = (prompt or "").lower()
 
+    if "amendment" in p:
+        return answer_c9_active_amendments()
     if "preference" in p:
         return answer_c8_contract_preferences()
     if "template" in p or "which playbook" in p or ("playbook" in p and "list" in p):

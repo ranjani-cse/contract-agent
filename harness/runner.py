@@ -22,6 +22,7 @@ from agent.agent import (
     answer_c6_portfolio_audit,
     answer_c7_templates_and_playbooks,
     answer_c8_contract_preferences,
+    answer_c9_active_amendments,
     answer_t7_refusal,
 )
 from harness.verifiers import (
@@ -51,6 +52,7 @@ from harness.verifiers import (
     verify_c6_portfolio_audit,
     verify_c7_templates_and_playbooks,
     verify_c8_contract_preferences,
+    verify_c9_active_amendments,
 )
 
 RESULTS = Path("results.json")
@@ -82,6 +84,7 @@ TASKS = [
     ("c6_portfolio_audit", "Full portfolio audit — blockers, risk, drift", verify_c6_portfolio_audit),
     ("c7_templates_and_playbooks", "List templates and playbooks", verify_c7_templates_and_playbooks),
     ("c8_contract_preferences", "Read contract preferences", verify_c8_contract_preferences),
+    ("c9_active_amendments", "Amendments on active contracts", verify_c9_active_amendments),
 ]
 
 _cached_a17 = None
@@ -113,6 +116,8 @@ def run_one(task_id, title, verifier):
             answer = answer_c7_templates_and_playbooks()
         elif task_id == "c8_contract_preferences":
             answer = answer_c8_contract_preferences()
+        elif task_id == "c9_active_amendments":
+            answer = answer_c9_active_amendments()
         else:
             answer = None
 

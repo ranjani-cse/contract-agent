@@ -399,3 +399,19 @@ def verify_c8_contract_preferences(agent_answer):
     pc = agent_answer.get("preference_count", 0)
     return {"pass": pc >= 1, "preference_count": pc}
 
+def verify_c9_active_amendments(agent_answer):
+    """c9 — active contracts scanned, amendments per contract returned."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "answer not a dict"}
+    if "_error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["_error"]}
+    if "error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["error"]}
+    ac = agent_answer.get("active_contracts", 0)
+    with_am = agent_answer.get("contracts_with_amendments", 0)
+    return {
+        "pass": ac >= 1 and with_am >= 1,
+        "active_contracts": ac,
+        "contracts_with_amendments": with_am,
+    }
+
