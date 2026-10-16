@@ -117,3 +117,34 @@ See `PLATFORM_RUN_24.md` for full evidence.
 
 All 18 base tasks + 6 complex tasks passed on the server.
 See `PLATFORM_RUN_24.md` for full evidence.
+
+
+## Session — 2026-10-16 (harness extension)
+
+**Extended the harness from 24 to 31 tasks.** Added six complex handlers
+(c7-c12) and one dispatcher self-test (t18).
+
+| Task | Purpose | Local |
+|---|---|---|
+| c7 templates + playbooks   | List ContractTemplate + ContractPlaybook       | PASS |
+| c8 contract preferences    | Read ContractPreferences                       | PASS |
+| c9 active amendments       | Amendments per active contract                 | PASS |
+| c10 overdue + unattested   | Filter obligations by status + attestation     | PASS |
+| c11 approval history       | Read approval_request_id / approval_status     | PASS |
+| c12 contracts without owner| Filter contracts missing owner_id              | PASS |
+| t18 route_task             | Dispatcher routes free-text prompt to handler  | PASS |
+
+**Local run:** 31/31 PASS
+**Latest commit:** 42f553d (pushed to origin/main)
+
+### Also updated
+
+- `route_task`: six new keyword branches for c7-c12
+- `route_task_llm`: expanded from 8 to 14 labels; handler dict now maps all 13
+- `DESIGN.md`: documented c1-c12 handlers + dispatcher section
+
+### Pending
+
+- Server run (evening 2026-10-16) — record result in `PLATFORM_RUN_31.md`
+- Update this file with the platform score after the run
+- Message Rohan / Ranjani with the result
