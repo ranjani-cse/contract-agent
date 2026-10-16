@@ -148,3 +148,15 @@ See `PLATFORM_RUN_24.md` for full evidence.
 - Server run (evening 2026-10-16) — record result in `PLATFORM_RUN_31.md`
 - Update this file with the platform score after the run
 - Message Rohan / Ranjani with the result
+
+
+## Platform run — 2026-10-16
+
+**32/32 PASS** on the platform (Suryodaya instance, commit 5f98bcf).
+
+All 18 base tasks + 12 complex tasks (c1-c12) + 2 dispatcher tests
+(t18, t19) passed on the server. Tokens used: 196.
+
+See `PLATFORM_RUN_32.md` for full evidence.
+
+Next submit window: 2026-10-19 15:10.
