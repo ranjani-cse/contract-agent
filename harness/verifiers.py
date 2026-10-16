@@ -429,3 +429,31 @@ def verify_c10_overdue_unattested(agent_answer):
         "overdue_unattested_count": cnt,
     }
 
+def verify_c11_approval_history(agent_answer):
+    """c11 — approval status returned for contracts."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "answer not a dict"}
+    if "_error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["_error"]}
+    total = agent_answer.get("total_contracts", 0)
+    with_appr = agent_answer.get("with_approval", 0)
+    return {
+        "pass": total >= 1 and with_appr >= 1,
+        "total_contracts": total,
+        "with_approval": with_appr,
+        "by_approval_status": agent_answer.get("by_approval_status", {}),
+    }
+
+def verify_c12_contracts_without_owner(agent_answer):
+    """c12 — contracts scanned for missing owner (0 orphans is a valid answer)."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "answer not a dict"}
+    if "_error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["_error"]}
+    total = agent_answer.get("total_contracts", 0)
+    return {
+        "pass": total >= 1 and "without_owner_count" in agent_answer,
+        "total_contracts": total,
+        "without_owner_count": agent_answer.get("without_owner_count", 0),
+    }
+

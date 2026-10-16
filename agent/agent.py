@@ -455,10 +455,60 @@ def answer_c10_overdue_unattested():
     }
 
 
+
+def answer_c11_approval_history():
+    """c11 — Approval status across contracts (uses approval_request_id / approval_status)."""
+    from collections import Counter
+    c = _unwrap(call_tool("Contract.list", {"limit": 200}))
+    rows = c.get("data", []) if isinstance(c, dict) else []
+    out = []
+    for r in rows:
+        if r.get("approval_status") or r.get("approval_request_id"):
+            out.append({
+                "contract_id": r.get("id"),
+                "number": r.get("number"),
+                "status": r.get("status"),
+                "approval_status": r.get("approval_status"),
+                "approval_request_id": r.get("approval_request_id"),
+                "approval_request_title": r.get("_approval_request_id_display"),
+            })
+    return {
+        "total_contracts": len(rows),
+        "with_approval": len(out),
+        "by_approval_status": dict(Counter(o["approval_status"] for o in out)),
+        "approvals": out[:50],
+    }
+
+
+
+def answer_c12_contracts_without_owner():
+    """c12 — Contracts missing an owner_id."""
+    c = _unwrap(call_tool("Contract.list", {"limit": 500}))
+    rows = c.get("data", []) if isinstance(c, dict) else []
+    orphans = [r for r in rows if not r.get("owner_id")]
+    return {
+        "total_contracts": len(rows),
+        "without_owner_count": len(orphans),
+        "without_owner": [
+            {
+                "id": r.get("id"),
+                "number": r.get("number"),
+                "status": r.get("status"),
+                "party_id": r.get("party_id"),
+            }
+            for r in orphans[:50]
+        ],
+    }
+
+
 def route_task(prompt):
     """Route a free-text prompt to the right agent handler."""
     p = (prompt or "").lower()
 
+    if "owner" in p or ("without" in p and "contract" in p):
+        return answer_c12_contracts_without_owner()
+    if "approv" in p:
+        return answer_c11_approval_history()
     if "overdue" in p and "attest" in p:
         return answer_c10_overdue_unattested()
     if "amendment" in p:

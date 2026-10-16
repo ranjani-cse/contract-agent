@@ -24,6 +24,8 @@ from agent.agent import (
     answer_c8_contract_preferences,
     answer_c9_active_amendments,
     answer_c10_overdue_unattested,
+    answer_c11_approval_history,
+    answer_c12_contracts_without_owner,
     answer_t7_refusal,
 )
 from harness.verifiers import (
@@ -55,6 +57,8 @@ from harness.verifiers import (
     verify_c8_contract_preferences,
     verify_c9_active_amendments,
     verify_c10_overdue_unattested,
+    verify_c11_approval_history,
+    verify_c12_contracts_without_owner,
 )
 
 RESULTS = Path("results.json")
@@ -88,6 +92,8 @@ TASKS = [
     ("c8_contract_preferences", "Read contract preferences", verify_c8_contract_preferences),
     ("c9_active_amendments", "Amendments on active contracts", verify_c9_active_amendments),
     ("c10_overdue_unattested", "Overdue and unattested obligations", verify_c10_overdue_unattested),
+    ("c11_approval_history", "Approval history across contracts", verify_c11_approval_history),
+    ("c12_contracts_without_owner", "Contracts without an owner", verify_c12_contracts_without_owner),
 ]
 
 _cached_a17 = None
@@ -123,6 +129,10 @@ def run_one(task_id, title, verifier):
             answer = answer_c9_active_amendments()
         elif task_id == "c10_overdue_unattested":
             answer = answer_c10_overdue_unattested()
+        elif task_id == "c11_approval_history":
+            answer = answer_c11_approval_history()
+        elif task_id == "c12_contracts_without_owner":
+            answer = answer_c12_contracts_without_owner()
         else:
             answer = None
 
