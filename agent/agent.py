@@ -373,9 +373,29 @@ def answer_c6_portfolio_audit():
     }
 
 
+
+def answer_c7_templates_and_playbooks():
+    """c7 — List ContractTemplate + ContractPlaybook."""
+    t_raw = _unwrap(call_tool("ContractTemplate.list", {"limit": 100}))
+    p_raw = _unwrap(call_tool("ContractPlaybook.list", {"limit": 100}))
+
+    templates = t_raw.get("data", []) if isinstance(t_raw, dict) else []
+    playbooks = p_raw.get("data", []) if isinstance(p_raw, dict) else []
+
+    return {
+        "templates": [t.get("name") for t in templates],
+        "template_count": len(templates),
+        "playbooks": [pl.get("name") for pl in playbooks],
+        "playbook_count": len(playbooks),
+    }
+
+
 def route_task(prompt):
     """Route a free-text prompt to the right agent handler."""
     p = (prompt or "").lower()
+
+    if "template" in p or "which playbook" in p or ("playbook" in p and "list" in p):
+        return answer_c7_templates_and_playbooks()
 
     if "portfolio" in p or "audit" in p or "priorit" in p:
         return answer_c6_portfolio_audit()

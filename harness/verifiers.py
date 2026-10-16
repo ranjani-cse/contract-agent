@@ -373,3 +373,20 @@ def verify_c6_portfolio_audit(agent_answer):
             "priority_count": len(agent_answer.get("priority_list", [])),
             "blockers": agent_answer.get("blockers_found"),
             "renewal_risk": agent_answer.get("renewal_at_risk")}
+
+def verify_c7_templates_and_playbooks(agent_answer):
+    """c7 — at least one template and one playbook returned."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "answer not a dict"}
+    if "_error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["_error"]}
+
+    tc = agent_answer.get("template_count", 0)
+    pc = agent_answer.get("playbook_count", 0)
+
+    return {
+        "pass": tc >= 1 and pc >= 1,
+        "template_count": tc,
+        "playbook_count": pc,
+    }
+
