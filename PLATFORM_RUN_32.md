@@ -1,52 +1,61 @@
 # Platform Run — Official Result (32 tasks)
 
-**Date:** 2026-10-16
+**Date:** 2026-10-16 15:10
+**Commit:** 5f98bcf
 **Instance:** suryodaya
-**Result:** _pending — fill after run_
+**Result:** **32/32 PASS**
+**Tokens used:** 196
+**Next submit window:** 2026-10-19 15:10
 
-## Base (t0–t17)
+## Base (t0–t17) — 18/18 PASS
 
-| Task | Result | Evidence |
-|---|---|---|
-| t0 auth | _pending_ | |
-| t1 renewal forecast | _pending_ | |
-| t2 playbook review | _pending_ | |
-| t3 missing obligations | _pending_ | |
-| t4 renewal decision | _pending_ | |
-| t5 deviation approval | _pending_ | |
-| t6 refusal cross-seat | _pending_ | |
-| t7 refusal unsupported | _pending_ | |
-| t8 pagination | _pending_ | |
-| t9 workflow guard | _pending_ | |
-| t10 tools scoping | _pending_ | |
-| t11 concurrency | _pending_ | |
-| t12 malformed id | _pending_ | |
-| t13 offset past end | _pending_ | |
-| t14 tools.describe foreign | _pending_ | |
-| t15 obligation guard | _pending_ | |
-| t16 missing UUID | _pending_ | |
-| t17 tools.describe available | _pending_ | |
+| Task | Result |
+|---|---|
+| t0 auth | PASS |
+| t1 renewal forecast | PASS |
+| t2 playbook review | PASS |
+| t3 missing obligations | PASS |
+| t4 renewal decision | PASS |
+| t5 deviation approval | PASS |
+| t6 refusal cross-seat | PASS |
+| t7 refusal unsupported | PASS |
+| t8 pagination | PASS |
+| t9 workflow guard | PASS |
+| t10 tools scoping | PASS |
+| t11 concurrency | PASS |
+| t12 malformed id | PASS |
+| t13 offset past end | PASS |
+| t14 tools.describe foreign | PASS |
+| t15 obligation guard | PASS |
+| t16 missing UUID | PASS |
+| t17 tools.describe available | PASS |
 
-## Complex (c1–c12)
+## Complex (c1–c12) — 12/12 PASS
 
-| Task | Result | Evidence |
-|---|---|---|
-| c1 disputed quarter | _pending_ | |
-| c2 close blockers | _pending_ | |
-| c3 auto-renewal risk | _pending_ | |
-| c4 playbook drift | _pending_ | |
-| c5 renewal package | _pending_ | |
-| c6 portfolio audit | _pending_ | |
-| c7 templates + playbooks | _pending_ | |
-| c8 contract preferences | _pending_ | |
-| c9 amendments on active | _pending_ | |
-| c10 overdue + unattested | _pending_ | |
-| c11 approval history | _pending_ | |
-| c12 contracts without owner | _pending_ | |
+| Task | Result |
+|---|---|
+| c1 disputed quarter | PASS |
+| c2 close blockers | PASS |
+| c3 auto-renewal risk | PASS |
+| c4 playbook drift | PASS |
+| c5 renewal package | PASS |
+| c6 portfolio audit | PASS |
+| c7 templates + playbooks | PASS |
+| c8 contract preferences | PASS |
+| c9 amendments on active | PASS |
+| c10 overdue + unattested | PASS |
+| c11 approval history | PASS |
+| c12 contracts without owner | PASS |
 
-## Dispatchers
+## Dispatchers — 2/2 PASS
 
-| Task | Result | Evidence |
-|---|---|---|
-| t18 route task (keyword) | _pending_ | |
-| t19 route task llm | _pending_ | |
+| Task | Result |
+|---|---|
+| t18 route task (keyword) | PASS |
+| t19 route task llm | PASS |
+
+## Summary
+
+All 32 tasks passed on the server. This run extended the previous
+24/24 result (2026-10-13) by adding 6 complex handlers (c7–c12)
+plus 2 dispatcher tests (t18, t19).
