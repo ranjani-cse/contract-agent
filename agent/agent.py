@@ -519,6 +519,35 @@ def answer_t18_route_task():
     }
 
 
+
+def answer_t19_route_task_llm():
+    """t19 — Exercise the LLM dispatcher with a real prompt (fallback-safe)."""
+    prompt = "Which templates and playbooks do we have?"
+    source = "llm"
+    try:
+        result = route_task_llm(prompt)
+    except Exception:
+        source = "keyword_fallback"
+        result = route_task(prompt)
+
+    if isinstance(result, dict) and "error" in result:
+        source = "error"
+
+    return {
+        "prompt": prompt,
+        "source": source,
+        "result_keys": sorted(result.keys()) if isinstance(result, dict) else [],
+        "result_type": type(result).__name__,
+        "is_error": isinstance(result, dict) and "error" in result,
+        "template_count": (
+            result.get("template_count") if isinstance(result, dict) else None
+        ),
+        "playbook_count": (
+            result.get("playbook_count") if isinstance(result, dict) else None
+        ),
+    }
+
+
 def route_task(prompt):
     """Route a free-text prompt to the right agent handler."""
     p = (prompt or "").lower()

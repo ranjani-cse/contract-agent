@@ -474,3 +474,21 @@ def verify_t18_route_task(agent_answer):
         "routed_ok": hit,
     }
 
+def verify_t19_route_task_llm(agent_answer):
+    """t19 — LLM dispatcher (or its keyword fallback) returned a valid result."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "answer not a dict"}
+    if agent_answer.get("is_error"):
+        return {"pass": False, "reason": "routed to error handler",
+                "source": agent_answer.get("source"),
+                "prompt": agent_answer.get("prompt")}
+    # c7's handler returns these keys
+    expected = {"template_count", "playbook_count"}
+    hit = expected.issubset(set(agent_answer.get("result_keys", [])))
+    return {
+        "pass": hit,
+        "source": agent_answer.get("source"),
+        "template_count": agent_answer.get("template_count"),
+        "playbook_count": agent_answer.get("playbook_count"),
+    }
+

@@ -27,6 +27,7 @@ from agent.agent import (
     answer_c11_approval_history,
     answer_c12_contracts_without_owner,
     answer_t18_route_task,
+    answer_t19_route_task_llm,
     answer_t7_refusal,
 )
 from harness.verifiers import (
@@ -61,6 +62,7 @@ from harness.verifiers import (
     verify_c11_approval_history,
     verify_c12_contracts_without_owner,
     verify_t18_route_task,
+    verify_t19_route_task_llm,
 )
 
 RESULTS = Path("results.json")
@@ -97,6 +99,7 @@ TASKS = [
     ("c11_approval_history", "Approval history across contracts", verify_c11_approval_history),
     ("c12_contracts_without_owner", "Contracts without an owner", verify_c12_contracts_without_owner),
     ("t18_route_task", "Dispatcher routes to correct handler", verify_t18_route_task),
+    ("t19_route_task_llm", "LLM dispatcher routes prompt (fallback-safe)", verify_t19_route_task_llm),
 ]
 
 _cached_a17 = None
@@ -138,6 +141,8 @@ def run_one(task_id, title, verifier):
             answer = answer_c12_contracts_without_owner()
         elif task_id == "t18_route_task":
             answer = answer_t18_route_task()
+        elif task_id == "t19_route_task_llm":
+            answer = answer_t19_route_task_llm()
         else:
             answer = None
 
