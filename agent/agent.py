@@ -390,10 +390,25 @@ def answer_c7_templates_and_playbooks():
     }
 
 
+
+def answer_c8_contract_preferences():
+    """c8 — Read ContractPreferences."""
+    raw = _unwrap(call_tool("ContractPreferences.list", {"limit": 100}))
+    prefs = raw.get("data", []) if isinstance(raw, dict) else []
+    if not prefs and isinstance(raw, dict) and "data" not in raw:
+        prefs = [raw] if raw else []
+    return {
+        "preferences": prefs,
+        "preference_count": len(prefs),
+    }
+
+
 def route_task(prompt):
     """Route a free-text prompt to the right agent handler."""
     p = (prompt or "").lower()
 
+    if "preference" in p:
+        return answer_c8_contract_preferences()
     if "template" in p or "which playbook" in p or ("playbook" in p and "list" in p):
         return answer_c7_templates_and_playbooks()
 

@@ -390,3 +390,12 @@ def verify_c7_templates_and_playbooks(agent_answer):
         "playbook_count": pc,
     }
 
+def verify_c8_contract_preferences(agent_answer):
+    """c8 — ContractPreferences returned."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "answer not a dict"}
+    if "_error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["_error"]}
+    pc = agent_answer.get("preference_count", 0)
+    return {"pass": pc >= 1, "preference_count": pc}
+
