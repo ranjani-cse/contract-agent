@@ -223,3 +223,15 @@ answer_c10_overdue_unattested and return the correct keys.
 | ContractDocument    | yes  | -      | yes       |
 | ContractRenewal     | yes  | yes    | yes       |
 | PrivacyAuditEvent   | yes  | -      | -         |
+
+
+## Planner
+
+`agent/planner.py`, `agent/executor.py`, `agent/agent_loop.py` compose
+multi-intent prompts into a sequence of handler calls.
+
+- LLM planner: asks the platform model for a JSON plan of intents
+- Rule fallback: matches keywords when no LLM is available
+
+Wired into `route_task` as a fallback. Tests in `tests/test_planner.py`.
+Verified on the platform: 32/32 PASS, 20 Oct 2026, commit faf47af.

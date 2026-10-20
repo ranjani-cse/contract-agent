@@ -62,3 +62,13 @@ An agent for the Contracts seat that reviews contracts against a playbook, flags
 - **Dispatcher:** `route_task` (keyword, deterministic) + `route_task_llm`
   (14-label LLM classifier, falls back to keyword on failure)
 
+
+
+## Planner
+
+`agent/planner.py` — L1 hybrid planner (LLM + rule fallback). Composes
+multi-intent prompts into a plan and executes via `agent/executor.py`.
+
+Fallback for prompts that don't match a single intent. Tested by
+`tests/test_planner.py`. Verified on the platform: 32/32 PASS,
+20 Oct 2026, commit faf47af.
