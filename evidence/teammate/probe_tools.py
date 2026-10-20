@@ -1,9 +1,10 @@
+import os
 import os, sys, json, requests
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Authenticate
 AS = "https://agentswitch.theschoolofai.in"
-body = {"email": "team17@theschoolofai.in", "password": "hC1ivvROcB7MEKxX!aA1"}
+body = {"email": os.environ["AS_EMAIL"], "password": os.environ["AS_PASSWORD"]}
 resp = requests.post(f"{AS}/api/auth/login", json=body)
 os.environ["TOKEN"] = resp.json()["token"]
 os.environ["AS"] = AS
