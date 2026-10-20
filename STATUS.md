@@ -160,3 +160,16 @@ All 18 base tasks + 12 complex tasks (c1-c12) + 2 dispatcher tests
 See `PLATFORM_RUN_32.md` for full evidence.
 
 Next submit window: 2026-10-19 15:10.
+
+
+## Platform run — 2026-10-20 (planner on main)
+
+**32/32 PASS** (Suryodaya, commit faf47af, tokens used: 196).
+
+Confirms the planner (L1 hybrid) on `main` does not regress any task.
+LLM dispatcher active on server (`source: "llm"` in t19).
+Harness rules verified: no hard-coded URL, 401/429 handled, failure_reason fixed.
+
+See `PLATFORM_RUN_32_PLANNER.md` for full evidence.
+
+Next submit window: 2026-10-23 15:49.
