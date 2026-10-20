@@ -13,8 +13,12 @@ import requests
 AS_URL = (
     os.environ.get("AGENTSWITCH_BASE_URL")
     or os.environ.get("AS_URL")
-    or "https://agentswitch.theschoolofai.in"
 )
+if not AS_URL:
+    raise RuntimeError(
+        "AGENTSWITCH_BASE_URL is not set. "
+        "The platform provides this at runtime."
+    )
 TOKEN = (
     os.environ.get("AGENTSWITCH_TOKEN")
     or os.environ.get("AS_TOKEN")
@@ -48,6 +52,9 @@ def call_tool(name, arguments=None):
 
 
 def is_failure(response):
+    status = response.get("http_status")
+    if status in (401, 429):
+        return True
     body = response.get("body", {})
     if "detail" in body and "result" not in body:
         return True

@@ -1,6 +1,7 @@
 """Verifiers read the DATABASE via MCP. Never trust agent prose."""
 import json
 from agent.mcp_client import call_tool, is_failure
+from agent.mcp_client import failure_reason
 
 def _extract(result):
     if is_failure(result):
