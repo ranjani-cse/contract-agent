@@ -513,6 +513,63 @@ def answer_c11_approval_history():
 
 
 
+
+def answer_c13_auto_renewal_overdue():
+    """c13 — Auto-renewing contracts with overdue+unattested obligations.
+
+    Joins c3 (renewal risk) and c10 (overdue obligations) by contract_id.
+    """
+    # Step 1: expiring / auto-renewing contracts
+    risk = _unwrap(call_tool(
+        "endpoint.contracts.renewal_forecast",
+        {"horizon_days": 60, "limit": 100},
+    ))
+    contracts = risk.get("contracts", []) if isinstance(risk, dict) else []
+    renewal_ids = set()
+    for row in contracts:
+        # shape: {"contract": {"id": "...", "number": "...", ...}, "gaps": [...]}
+        inner = row.get("contract") if isinstance(row, dict) else None
+        cid = (inner or {}).get("id") if isinstance(inner, dict) else None
+        if cid:
+            renewal_ids.add(cid)
+
+    # Step 2: overdue + unattested obligations (from c10 logic)
+    obl = _unwrap(call_tool("ContractObligation.list", {"limit": 500}))
+    rows = obl.get("data", []) if isinstance(obl, dict) else []
+    overdue = [
+        r for r in rows
+        if r.get("status") == "overdue"
+        and r.get("attestation_state") == "not_attested"
+    ]
+    overdue_by_contract = {}
+    for o in overdue:
+        cid = o.get("contract_id")
+        if cid:
+            overdue_by_contract.setdefault(cid, []).append({
+                "id": o.get("id"),
+                "title": o.get("title"),
+                "due_date": o.get("due_date"),
+            })
+
+    # Step 3: intersection
+    both = [
+        {
+            "contract_id": cid,
+            "overdue_count": len(overdue_by_contract[cid]),
+            "overdue_obligations": overdue_by_contract[cid][:5],
+        }
+        for cid in renewal_ids
+        if cid in overdue_by_contract
+    ]
+
+    return {
+        "renewal_ids_count": len(renewal_ids),
+        "overdue_contracts_count": len(overdue_by_contract),
+        "intersection_count": len(both),
+        "intersection": both[:20],
+    }
+
+
 def answer_c12_contracts_without_owner():
     """c12 — Contracts missing an owner_id."""
     c = _unwrap(call_tool("Contract.list", {"limit": 500}))

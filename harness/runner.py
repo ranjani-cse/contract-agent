@@ -26,6 +26,7 @@ from agent.agent import (
     answer_c10_overdue_unattested,
     answer_c11_approval_history,
     answer_c12_contracts_without_owner,
+    answer_c13_auto_renewal_overdue,
     answer_t18_route_task,
     answer_t19_route_task_llm,
     answer_t21_route_c4,
@@ -64,6 +65,7 @@ from harness.verifiers import (
     verify_c10_overdue_unattested,
     verify_c11_approval_history,
     verify_c12_contracts_without_owner,
+    verify_c13_auto_renewal_overdue,
     verify_t18_route_task,
     verify_t19_route_task_llm,
     verify_t21_route_c4,
@@ -102,6 +104,7 @@ TASKS = [
     ("c10_overdue_unattested", "Overdue and unattested obligations", verify_c10_overdue_unattested),
     ("c11_approval_history", "Approval history across contracts", verify_c11_approval_history),
     ("c12_contracts_without_owner", "Contracts without an owner", verify_c12_contracts_without_owner),
+    ("c13_auto_renewal_overdue", "Auto-renewing contracts with overdue obligations", verify_c13_auto_renewal_overdue),
     ("t18_route_task", "Dispatcher routes to correct handler", verify_t18_route_task),
     ("t19_route_task_llm", "LLM dispatcher routes prompt (fallback-safe)", verify_t19_route_task_llm),
     ("t21_route_c4", "LLM routes c4 prompt to playbook drift handler", verify_t21_route_c4),
@@ -146,6 +149,8 @@ def run_one(task_id, title, verifier):
             answer = answer_c11_approval_history()
         elif task_id == "c12_contracts_without_owner":
             answer = answer_c12_contracts_without_owner()
+        elif task_id == "c13_auto_renewal_overdue":
+            answer = answer_c13_auto_renewal_overdue()
         elif task_id == "t18_route_task":
             answer = answer_t18_route_task()
         elif task_id == "t19_route_task_llm":

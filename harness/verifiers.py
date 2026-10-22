@@ -542,3 +542,21 @@ def verify_t21_route_c4(agent_answer):
         "drift_reports_len": agent_answer.get("drift_reports_len"),
     }
 
+def verify_c13_auto_renewal_overdue(agent_answer):
+    """c13 — the join returns at least one intersection when data exists."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "not a dict"}
+    if "_error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["_error"]}
+
+    renewal_ids = agent_answer.get("renewal_ids_count", 0)
+    overdue = agent_answer.get("overdue_contracts_count", 0)
+    both = agent_answer.get("intersection_count", 0)
+
+    return {
+        "pass": renewal_ids >= 1 and overdue >= 1,
+        "renewal_ids_count": renewal_ids,
+        "overdue_contracts_count": overdue,
+        "intersection_count": both,
+    }
+
