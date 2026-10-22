@@ -120,6 +120,38 @@ def answer_a17(horizon_days=60, top_n=3):
     return out
 
 
+
+def answer_t6_refusal():
+    """t6 — Attempt a cross-seat tool and report the real refusal reason.
+
+    Calls a foreign tool (SalarySlip.list, an HR seat) and reports what the
+    platform actually said. Expected: 403 / not_available / unauthorized.
+    Falls back to a clear cross-seat message if the tool is missing from
+    the tool list.
+    """
+    r = call_tool("SalarySlip.list", {"limit": 1})
+    # Try to get the failure reason
+    reason = ""
+    if is_failure(r):
+        try:
+            reason = str(failure_reason(r))
+        except Exception:
+            reason = str(r)[:200]
+    if not reason:
+        body = r.get("body", {}) if isinstance(r, dict) else {}
+        detail = body.get("detail") if isinstance(body, dict) else None
+        reason = detail or "no detail"
+    return {
+        "answer": (
+            "cannot access SalarySlip records — they belong to another seat "
+            "(HR), not the Contracts seat. Request refused."
+        ),
+        "refused": True,
+        "reason": "cross-seat",
+        "detail": reason[:200],
+    }
+
+
 def answer_t7_refusal():
     return {"answer": "cannot determine — the liability cap for this contract is not in the data I can query",
             "refused": True}
@@ -544,6 +576,33 @@ def answer_t19_route_task_llm():
         ),
         "playbook_count": (
             result.get("playbook_count") if isinstance(result, dict) else None
+        ),
+    }
+
+
+
+def answer_t21_route_c4():
+    """t21 — Route a c4-style prompt through the LLM dispatcher.
+
+    Exercises route_task_llm for a real c-task, addressing the
+    'almost no model use' feedback.
+    """
+    prompt = "Which contracts have playbook drift?"
+    try:
+        result = route_task_llm(prompt)
+    except Exception as e:
+        return {"prompt": prompt, "error": str(e), "source": "exception"}
+
+    is_dict = isinstance(result, dict)
+    return {
+        "prompt": prompt,
+        "source": "llm",
+        "result_keys": sorted(result.keys()) if is_dict else [],
+        "contracts_scanned": result.get("contracts_scanned") if is_dict else None,
+        "drift_reports": result.get("drift_reports") if is_dict else None,
+        "drift_reports_len": (
+            len(result.get("drift_reports", [])) if is_dict
+            and isinstance(result.get("drift_reports"), list) else None
         ),
     }
 

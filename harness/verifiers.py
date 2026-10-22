@@ -493,3 +493,52 @@ def verify_t19_route_task_llm(agent_answer):
         "playbook_count": agent_answer.get("playbook_count"),
     }
 
+def verify_refusal_cross_seat(agent_answer):
+    """t6 — pass only if the refusal is genuinely cross-seat."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "answer not a dict"}
+    text = str(agent_answer).lower()
+
+    # Must show genuine cross-seat refusal (not just liability cap)
+    cross_seat_markers = [
+        "cross-seat", "another seat", "belong to another",
+        "not_available", "not available", "403", "forbidden",
+        "unauthorized", "not permitted", "salaryslip", "hr seat",
+    ]
+    # Must NOT be about liability caps (that's t7's job)
+    liability_cap_phrases = [
+        "liability cap", "not in the data i can query",
+    ]
+
+    has_cross_seat = any(m in text for m in cross_seat_markers)
+    is_liability_cap = any(m in text for m in liability_cap_phrases)
+
+    return {
+        "pass": has_cross_seat and not is_liability_cap,
+        "refused": agent_answer.get("refused"),
+        "reason": agent_answer.get("reason"),
+        "detail": agent_answer.get("detail", "")[:100],
+        "has_cross_seat_marker": has_cross_seat,
+        "is_liability_cap_answer": is_liability_cap,
+    }
+
+def verify_t21_route_c4(agent_answer):
+    """t21 — pass only if the LLM routed the prompt to c4's handler."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "answer not a dict"}
+    if agent_answer.get("error"):
+        return {"pass": False, "reason": agent_answer["error"]}
+
+    keys = agent_answer.get("result_keys", [])
+    # c4 real keys: 'contracts_scanned' and 'drift_reports'
+    has_c4_keys = "contracts_scanned" in keys and "drift_reports" in keys
+    source = agent_answer.get("source")
+
+    return {
+        "pass": has_c4_keys and source == "llm",
+        "source": source,
+        "has_c4_keys": has_c4_keys,
+        "contracts_scanned": agent_answer.get("contracts_scanned"),
+        "drift_reports_len": agent_answer.get("drift_reports_len"),
+    }
+

@@ -28,6 +28,8 @@ from agent.agent import (
     answer_c12_contracts_without_owner,
     answer_t18_route_task,
     answer_t19_route_task_llm,
+    answer_t21_route_c4,
+    answer_t6_refusal,
     answer_t7_refusal,
 )
 from harness.verifiers import (
@@ -38,6 +40,7 @@ from harness.verifiers import (
     verify_renewal_decision,
     verify_deviation_approval,
     verify_refusal,
+    verify_refusal_cross_seat,
     verify_refusal_or_empty,
     verify_pagination,
     verify_workflow_guard,
@@ -63,6 +66,7 @@ from harness.verifiers import (
     verify_c12_contracts_without_owner,
     verify_t18_route_task,
     verify_t19_route_task_llm,
+    verify_t21_route_c4,
 )
 
 RESULTS = Path("results.json")
@@ -74,7 +78,7 @@ TASKS = [
     ("t3_missing_obligations", "Evidence packs retrieved per contract", verify_missing_obligations),
     ("t4_renewal_decision", "A ContractRenewal moved off undecided", verify_renewal_decision),
     ("t5_deviation_approval", "A deviation entered the approval flow", verify_deviation_approval),
-    ("t6_refusal_cross_seat", "Agent declines another seat's data", verify_refusal),
+    ("t6_refusal_cross_seat", "Agent declines another seat's data", verify_refusal_cross_seat),
     ("t7_refusal_unsupported", "Agent declines unsupported questions", verify_refusal_or_empty),
     ("t8_pagination", "Contract.list returns bounded rows", verify_pagination),
     ("t9_workflow_guard", "Invalid state transitions are rejected", verify_workflow_guard),
@@ -100,6 +104,7 @@ TASKS = [
     ("c12_contracts_without_owner", "Contracts without an owner", verify_c12_contracts_without_owner),
     ("t18_route_task", "Dispatcher routes to correct handler", verify_t18_route_task),
     ("t19_route_task_llm", "LLM dispatcher routes prompt (fallback-safe)", verify_t19_route_task_llm),
+    ("t21_route_c4", "LLM routes c4 prompt to playbook drift handler", verify_t21_route_c4),
 ]
 
 _cached_a17 = None
@@ -113,7 +118,9 @@ def run_one(task_id, title, verifier):
                 print("  (running answer_a17 once — caching for t1-t5)")
                 _cached_a17 = answer_a17(horizon_days=60)
             answer = _cached_a17
-        elif task_id.startswith(("t6_", "t7_")):
+        elif task_id == "t6_refusal_cross_seat":
+            answer = answer_t6_refusal()
+        elif task_id == "t7_refusal_unsupported":
             answer = answer_t7_refusal()
         elif task_id == "c1_disputed_quarter":
             answer = answer_c1_disputed_quarter()
@@ -143,6 +150,8 @@ def run_one(task_id, title, verifier):
             answer = answer_t18_route_task()
         elif task_id == "t19_route_task_llm":
             answer = answer_t19_route_task_llm()
+        elif task_id == "t21_route_c4":
+            answer = answer_t21_route_c4()
         else:
             answer = None
 
