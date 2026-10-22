@@ -570,6 +570,136 @@ def answer_c13_auto_renewal_overdue():
     }
 
 
+
+def answer_c14_orphan_amendments():
+    """c14 — contracts without an owner that have amendments."""
+    # Step 1: contracts without owner (c12 logic)
+    c = _unwrap(call_tool("Contract.list", {"limit": 500}))
+    rows = c.get("data", []) if isinstance(c, dict) else []
+    orphans = [r for r in rows if not r.get("owner_id")]
+    orphan_ids = {r.get("id") for r in orphans if r.get("id")}
+
+    # Step 2: amendments per orphan
+    details = []
+    for o in orphans[:20]:
+        cid = o.get("id")
+        a = _unwrap(call_tool("ContractAmendment.list",
+                              {"contract_id": cid, "limit": 50}))
+        amds = a.get("data", []) if isinstance(a, dict) else []
+        if amds:
+            details.append({
+                "contract_id": cid,
+                "number": o.get("number"),
+                "amendment_count": len(amds),
+                "amendment_titles": [x.get("title") for x in amds[:5]],
+            })
+
+    return {
+        "total_contracts": len(rows),
+        "orphan_count": len(orphans),
+        "orphans_with_amendments": len(details),
+        "details": details,
+    }
+
+
+def answer_c15_top_party_drift():
+    """c15 — party with most amendments + their playbook drift."""
+    from collections import Counter
+    # Step 1: all amendments
+    a = _unwrap(call_tool("ContractAmendment.list", {"limit": 500}))
+    amds = a.get("data", []) if isinstance(a, dict) else []
+
+    # Step 2: group by contract, then by party (via contract lookup)
+    c = _unwrap(call_tool("Contract.list", {"limit": 500}))
+    contracts = c.get("data", []) if isinstance(c, dict) else []
+    cid_to_party = {
+        r.get("id"): r.get("party_id")
+        for r in contracts if r.get("id") and r.get("party_id")
+    }
+    party_amd_counts = Counter()
+    for amd in amds:
+        cid = amd.get("contract_id")
+        party = cid_to_party.get(cid)
+        if party:
+            party_amd_counts[party] += 1
+
+    if not party_amd_counts:
+        return {
+            "top_party_id": None,
+            "top_party_amendment_count": 0,
+            "drift_reports": [],
+            "note": "no amendments found",
+        }
+
+    top_party_id, top_count = party_amd_counts.most_common(1)[0]
+
+    # Step 3: run drift on that party's contracts
+    party_cids = [cid for cid, pid in cid_to_party.items() if pid == top_party_id]
+    drift = []
+    for cid in party_cids[:5]:
+        docs = _unwrap(call_tool("ContractDocument.list",
+                                 {"contract_id": cid, "limit": 1}))
+        doc_rows = docs.get("data", []) if isinstance(docs, dict) else []
+        if doc_rows:
+            drift.append({
+                "contract_id": cid,
+                "document_id": doc_rows[0].get("id"),
+                "clauses": len(doc_rows[0].get("clauses_used") or []),
+            })
+
+    return {
+        "top_party_id": top_party_id,
+        "top_party_amendment_count": top_count,
+        "parties_with_amendments": len(party_amd_counts),
+        "party_contracts_count": len(party_cids),
+        "drift_reports": drift,
+    }
+
+
+def answer_c16_pending_approval_overdue():
+    """c16 — contracts pending approval that also have overdue obligations."""
+    # Step 1: pending-approval contracts (c11 logic)
+    c = _unwrap(call_tool("Contract.list", {"limit": 500}))
+    rows = c.get("data", []) if isinstance(c, dict) else []
+    pending = [
+        r for r in rows
+        if r.get("status") == "pending_approval"
+        or r.get("approval_status") == "pending_approval"
+    ]
+    pending_ids = {r.get("id") for r in pending if r.get("id")}
+
+    # Step 2: overdue + unattested obligations
+    obl = _unwrap(call_tool("ContractObligation.list", {"limit": 500}))
+    orows = obl.get("data", []) if isinstance(obl, dict) else []
+    overdue_by_contract = {}
+    for o in orows:
+        if o.get("status") == "overdue" and o.get("attestation_state") == "not_attested":
+            cid = o.get("contract_id")
+            if cid:
+                overdue_by_contract.setdefault(cid, []).append({
+                    "id": o.get("id"),
+                    "title": o.get("title"),
+                    "due_date": o.get("due_date"),
+                })
+
+    # Step 3: intersection
+    both = [
+        {
+            "contract_id": cid,
+            "overdue_count": len(overdue_by_contract[cid]),
+            "overdue_titles": [x["title"] for x in overdue_by_contract[cid][:3]],
+        }
+        for cid in pending_ids
+        if cid in overdue_by_contract
+    ]
+
+    return {
+        "pending_count": len(pending),
+        "overdue_contracts_count": len(overdue_by_contract),
+        "intersection_count": len(both),
+        "intersection": both[:20],
+    }
+
 def answer_c12_contracts_without_owner():
     """c12 — Contracts missing an owner_id."""
     c = _unwrap(call_tool("Contract.list", {"limit": 500}))

@@ -27,6 +27,9 @@ from agent.agent import (
     answer_c11_approval_history,
     answer_c12_contracts_without_owner,
     answer_c13_auto_renewal_overdue,
+    answer_c16_pending_approval_overdue,
+    answer_c15_top_party_drift,
+    answer_c14_orphan_amendments,
     answer_t18_route_task,
     answer_t19_route_task_llm,
     answer_t21_route_c4,
@@ -66,6 +69,9 @@ from harness.verifiers import (
     verify_c11_approval_history,
     verify_c12_contracts_without_owner,
     verify_c13_auto_renewal_overdue,
+    verify_c16_pending_approval_overdue,
+    verify_c15_top_party_drift,
+    verify_c14_orphan_amendments,
     verify_t18_route_task,
     verify_t19_route_task_llm,
     verify_t21_route_c4,
@@ -105,6 +111,9 @@ TASKS = [
     ("c11_approval_history", "Approval history across contracts", verify_c11_approval_history),
     ("c12_contracts_without_owner", "Contracts without an owner", verify_c12_contracts_without_owner),
     ("c13_auto_renewal_overdue", "Auto-renewing contracts with overdue obligations", verify_c13_auto_renewal_overdue),
+    ("c14_orphan_amendments", "Contracts without owner that have amendments", verify_c14_orphan_amendments),
+    ("c15_top_party_drift", "Party with most amendments — their playbook drift", verify_c15_top_party_drift),
+    ("c16_pending_overdue", "Pending-approval contracts with overdue obligations", verify_c16_pending_approval_overdue),
     ("t18_route_task", "Dispatcher routes to correct handler", verify_t18_route_task),
     ("t19_route_task_llm", "LLM dispatcher routes prompt (fallback-safe)", verify_t19_route_task_llm),
     ("t21_route_c4", "LLM routes c4 prompt to playbook drift handler", verify_t21_route_c4),
@@ -151,6 +160,12 @@ def run_one(task_id, title, verifier):
             answer = answer_c12_contracts_without_owner()
         elif task_id == "c13_auto_renewal_overdue":
             answer = answer_c13_auto_renewal_overdue()
+        elif task_id == "c14_orphan_amendments":
+            answer = answer_c14_orphan_amendments()
+        elif task_id == "c15_top_party_drift":
+            answer = answer_c15_top_party_drift()
+        elif task_id == "c16_pending_overdue":
+            answer = answer_c16_pending_approval_overdue()
         elif task_id == "t18_route_task":
             answer = answer_t18_route_task()
         elif task_id == "t19_route_task_llm":

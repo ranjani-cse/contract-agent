@@ -560,3 +560,51 @@ def verify_c13_auto_renewal_overdue(agent_answer):
         "intersection_count": both,
     }
 
+def verify_c14_orphan_amendments(agent_answer):
+    """c14 — scanned contracts; intersections optional (0 is valid)."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "not a dict"}
+    if "_error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["_error"]}
+    return {
+        "pass": agent_answer.get("total_contracts", 0) >= 1
+                and "orphan_count" in agent_answer,
+        "total_contracts": agent_answer.get("total_contracts"),
+        "orphan_count": agent_answer.get("orphan_count"),
+        "orphans_with_amendments": agent_answer.get("orphans_with_amendments"),
+    }
+
+
+def verify_c15_top_party_drift(agent_answer):
+    """c15 — top party found (or explicit 'no amendments')."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "not a dict"}
+    if "_error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["_error"]}
+    # pass if we have a party OR the explicit no-data case
+    ok = (
+        agent_answer.get("top_party_id") is not None
+        or agent_answer.get("note") == "no amendments found"
+    )
+    return {
+        "pass": ok,
+        "top_party_id": agent_answer.get("top_party_id"),
+        "top_party_amendment_count": agent_answer.get("top_party_amendment_count"),
+        "drift_reports_count": len(agent_answer.get("drift_reports", [])),
+    }
+
+
+def verify_c16_pending_approval_overdue(agent_answer):
+    """c16 — both sides scanned; intersection optional."""
+    if not isinstance(agent_answer, dict):
+        return {"pass": False, "reason": "not a dict"}
+    if "_error" in agent_answer:
+        return {"pass": False, "reason": agent_answer["_error"]}
+    return {
+        "pass": agent_answer.get("pending_count", 0) >= 1
+                and agent_answer.get("overdue_contracts_count", 0) >= 1,
+        "pending_count": agent_answer.get("pending_count"),
+        "overdue_contracts_count": agent_answer.get("overdue_contracts_count"),
+        "intersection_count": agent_answer.get("intersection_count"),
+    }
+
