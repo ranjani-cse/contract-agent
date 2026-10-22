@@ -173,3 +173,20 @@ Harness rules verified: no hard-coded URL, 401/429 handled, failure_reason fixed
 See `PLATFORM_RUN_32_PLANNER.md` for full evidence.
 
 Next submit window: 2026-10-23 15:49.
+
+
+## Capstone closeout — 2026-10-22
+
+Extended harness to **37 tasks**:
+- 18 base + 16 complex (c1-c16) + 3 dispatcher (t18, t19, t21)
+- c13-c16: cross-entity joins (auto-renewal ∩ overdue, orphans ∩ amendments,
+  top-party drift, pending-approval ∩ overdue)
+- t6 fixed: genuine cross-seat refusal (tool_not_available)
+- t21 added: model path exercised for a real c-task
+
+Local run: 37/37 PASS. Awaiting 23 Oct submission window.
+
+Real findings from joins:
+- c13: 46 contracts auto-renewing AND have overdue obligations
+- c15: top party with 24 amendments → 3 drift reports
+- c16: 42 contracts pending approval AND have overdue obligations
